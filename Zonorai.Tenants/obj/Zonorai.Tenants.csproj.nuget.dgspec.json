@@ -1,0 +1,88 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/zonorai/Code/libraries/Tenants/Zonorai.Tenants/Zonorai.Tenants.csproj": {}
+  },
+  "projects": {
+    "/home/zonorai/Code/libraries/Tenants/Zonorai.Tenants/Zonorai.Tenants.csproj": {
+      "version": "1.0.2",
+      "restore": {
+        "projectUniqueName": "/home/zonorai/Code/libraries/Tenants/Zonorai.Tenants/Zonorai.Tenants.csproj",
+        "projectName": "Zonorai.Tenants",
+        "projectPath": "/home/zonorai/Code/libraries/Tenants/Zonorai.Tenants/Zonorai.Tenants.csproj",
+        "packagesPath": "/home/zonorai/.nuget/packages/",
+        "outputPath": "/home/zonorai/Code/libraries/Tenants/Zonorai.Tenants/obj/",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "/usr/share/dotnet/sdk/NuGetFallbackFolder"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Finbuckle.MultiTenant": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            },
+            "Finbuckle.MultiTenant.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            },
+            "Finbuckle.MultiTenant.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            },
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[10.3.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.12, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.100/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
