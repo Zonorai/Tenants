@@ -2,15 +2,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Zonorai.Tenants.Application.Common;
+using Zonorai.Tenants.ApplicationInterface.Users.Commands;
+using Zonorai.Tenants.ApplicationInterface.Users.Commands.TryLogin;
 
 namespace Zonorai.Tenants.Application.Users.Commands.TryLogin
 {
-    public class TryLoginCommand : IRequest<LoginResult>
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
-
     public class TryLoginCommandHandler : IRequestHandler<TryLoginCommand, LoginResult>
     {
         private readonly IUserService _userService;

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "3s+elkgeautX0/73hVB/bd4AA4EAG6wDQ1XmwOuVDThCD0j3n06M2nafRS+P2t7TedyjVIPZUVusPKtjA6qYKA==",
+  "dgSpecHash": "0wZUPWySVzsEd0Rl2p/plzzsHx74VRrF2wRSk+jDCrijfu8KFMXqK1eiT6RPrM3qaPFqiCyt+1rMqNLTPMJhQA==",
   "success": true,
   "projectFilePath": "/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Infrastructure/Zonorai.Tenants.Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -11,6 +11,7 @@
     "/tmp/.nuget/packages/humanizer.core/2.8.26/humanizer.core.2.8.26.nupkg.sha512",
     "/tmp/.nuget/packages/mediatr/9.0.0/mediatr.9.0.0.nupkg.sha512",
     "/tmp/.nuget/packages/mediatr.extensions.microsoft.dependencyinjection/9.0.0/mediatr.extensions.microsoft.dependencyinjection.9.0.0.nupkg.sha512",
+    "/tmp/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/5.0.13/microsoft.aspnetcore.authentication.jwtbearer.5.0.13.nupkg.sha512",
     "/tmp/.nuget/packages/microsoft.aspnetcore.authentication.openidconnect/5.0.12/microsoft.aspnetcore.authentication.openidconnect.5.0.12.nupkg.sha512",
     "/tmp/.nuget/packages/microsoft.aspnetcore.cryptography.internal/5.0.12/microsoft.aspnetcore.cryptography.internal.5.0.12.nupkg.sha512",
     "/tmp/.nuget/packages/microsoft.aspnetcore.cryptography.keyderivation/5.0.12/microsoft.aspnetcore.cryptography.keyderivation.5.0.12.nupkg.sha512",

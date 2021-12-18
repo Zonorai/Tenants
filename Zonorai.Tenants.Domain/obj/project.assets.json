@@ -30,7 +30,7 @@
           "lib/net5.0/FluentValidation.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Cryptography.Internal/5.0.12": {
+      "Microsoft.AspNetCore.Cryptography.Internal/5.0.13": {
         "type": "package",
         "compile": {
           "lib/net5.0/Microsoft.AspNetCore.Cryptography.Internal.dll": {}
@@ -39,10 +39,10 @@
           "lib/net5.0/Microsoft.AspNetCore.Cryptography.Internal.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Cryptography.KeyDerivation/5.0.12": {
+      "Microsoft.AspNetCore.Cryptography.KeyDerivation/5.0.13": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Cryptography.Internal": "5.0.12"
+          "Microsoft.AspNetCore.Cryptography.Internal": "5.0.13"
         },
         "compile": {
           "lib/net5.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.dll": {}
@@ -243,10 +243,10 @@
         "lib/netstandard2.1/FluentValidation.xml"
       ]
     },
-    "Microsoft.AspNetCore.Cryptography.Internal/5.0.12": {
-      "sha512": "HLu2mxPH/Imi2DJG2QGU+xLh7WG2sr6b3gVKUW0FuguKpZzi3n482lO1DMgSbt6kJxlANd71gP9pqI8JT/+W+g==",
+    "Microsoft.AspNetCore.Cryptography.Internal/5.0.13": {
+      "sha512": "JzI40kojLP4cPUu6NqPrliNPDRH87xH6SXBe2BMDv1d3ERtG+5TnXUbqD+0NwwnEjoo8o9clWOu0gHeoOb/5BA==",
       "type": "package",
-      "path": "microsoft.aspnetcore.cryptography.internal/5.0.12",
+      "path": "microsoft.aspnetcore.cryptography.internal/5.0.13",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -258,14 +258,14 @@
         "lib/net5.0/Microsoft.AspNetCore.Cryptography.Internal.xml",
         "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.Internal.dll",
         "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.Internal.xml",
-        "microsoft.aspnetcore.cryptography.internal.5.0.12.nupkg.sha512",
+        "microsoft.aspnetcore.cryptography.internal.5.0.13.nupkg.sha512",
         "microsoft.aspnetcore.cryptography.internal.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Cryptography.KeyDerivation/5.0.12": {
-      "sha512": "FJH+5Nf8+7IqCqalmtJlm/ti0AHtO9Msp7A6Xq00hZicOglqZ91irajoM/cQA7gb2hwL5FxIJc0ALInJqdANNQ==",
+    "Microsoft.AspNetCore.Cryptography.KeyDerivation/5.0.13": {
+      "sha512": "RSwb41IMF3eYsGlnQ9wTrBay06DE5AhXLsh/IoF/5/MZQ4b26ZIPqV1nxLw0n/rKzbhc4SmPBGf4zsss8YoItA==",
       "type": "package",
-      "path": "microsoft.aspnetcore.cryptography.keyderivation/5.0.12",
+      "path": "microsoft.aspnetcore.cryptography.keyderivation/5.0.13",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -277,7 +277,7 @@
         "lib/net5.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.xml",
         "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.dll",
         "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.xml",
-        "microsoft.aspnetcore.cryptography.keyderivation.5.0.12.nupkg.sha512",
+        "microsoft.aspnetcore.cryptography.keyderivation.5.0.13.nupkg.sha512",
         "microsoft.aspnetcore.cryptography.keyderivation.nuspec"
       ]
     },
@@ -567,7 +567,7 @@
     "net5.0": [
       "Finbuckle.MultiTenant >= 6.5.0",
       "FluentValidation >= 10.3.4",
-      "Microsoft.AspNetCore.Cryptography.KeyDerivation >= 5.0.12"
+      "Microsoft.AspNetCore.Cryptography.KeyDerivation >= 5.0.13"
     ]
   },
   "packageFolders": {
@@ -617,7 +617,7 @@
           },
           "Microsoft.AspNetCore.Cryptography.KeyDerivation": {
             "target": "Package",
-            "version": "[5.0.12, )"
+            "version": "[5.0.13, )"
           }
         },
         "imports": [

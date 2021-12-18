@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Zonorai.Tenants.Application.Users.Commands;
+using Zonorai.Tenants.ApplicationInterface.Users.Commands;
 using Zonorai.Tenants.Domain.Users;
 
 namespace Zonorai.Tenants.Application.Common

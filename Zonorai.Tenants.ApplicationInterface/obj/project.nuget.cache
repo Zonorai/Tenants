@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "zuxWhim3soZ17q5sGLiKfj4qNyd9r1CWrF+Nq4ffdKxDpOir2zNkQ6BCqhbPf7W7DoLuCfsBK9XF5tpfmwfO6Q==",
+  "dgSpecHash": "NuHejiOb3NVQPb8/oWEEQpQKSSYC8YpPvlGAuYS+JyRQQt0/T3hQTpGIYFqn+nrv721h4OzLGiqJJjIyWKU7bQ==",
   "success": true,
   "projectFilePath": "/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.ApplicationInterface/Zonorai.Tenants.ApplicationInterface.csproj",
   "expectedPackageFiles": [
+    "/tmp/.nuget/packages/fluentresults/3.1.0/fluentresults.3.1.0.nupkg.sha512",
     "/tmp/.nuget/packages/fluentvalidation/10.3.6/fluentvalidation.10.3.6.nupkg.sha512",
-    "/tmp/.nuget/packages/mediatr/9.0.0/mediatr.9.0.0.nupkg.sha512"
+    "/tmp/.nuget/packages/fluentvalidation.dependencyinjectionextensions/10.3.6/fluentvalidation.dependencyinjectionextensions.10.3.6.nupkg.sha512",
+    "/tmp/.nuget/packages/mediatr/9.0.0/mediatr.9.0.0.nupkg.sha512",
+    "/tmp/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/5.0.0/microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg.sha512"
   ],
   "logs": []
 }

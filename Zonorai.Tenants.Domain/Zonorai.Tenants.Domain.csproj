@@ -2,10 +2,13 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <Authors>Carel vd Merwe</Authors>
     </PropertyGroup>
+    
     <ItemGroup>
         <PackageReference Include="FluentValidation" Version="10.3.4" />
         <PackageReference Include="Finbuckle.MultiTenant" Version="6.5.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="5.0.12" />
+        <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="5.0.13" />
     </ItemGroup>
+    
 </Project>

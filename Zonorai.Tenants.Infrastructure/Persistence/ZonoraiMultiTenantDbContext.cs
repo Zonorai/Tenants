@@ -6,13 +6,13 @@ using Zonorai.Tenants.Domain.Users;
 
 namespace Zonorai.Tenants.Infrastructure.Persistence
 {
-    public class ZonoraiMultiTenantDbContext : MultiTenantDbContext
+    public abstract class ZonoraiMultiTenantDbContext : MultiTenantDbContext
     {
-        public ZonoraiMultiTenantDbContext(ITenantInfo tenantInfo) : base(tenantInfo)
+        protected ZonoraiMultiTenantDbContext(ITenantInfo tenantInfo) : base(tenantInfo)
         {
         }
 
-        public ZonoraiMultiTenantDbContext(ITenantInfo tenantInfo, DbContextOptions options) : base(tenantInfo, options)
+        protected ZonoraiMultiTenantDbContext(ITenantInfo tenantInfo, DbContextOptions options) : base(tenantInfo, options)
         {
         }
         

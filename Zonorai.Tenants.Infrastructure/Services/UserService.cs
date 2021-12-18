@@ -7,6 +7,7 @@ using Finbuckle.MultiTenant;
 using Microsoft.EntityFrameworkCore;
 using Zonorai.Tenants.Application.Common;
 using Zonorai.Tenants.Application.Users.Commands;
+using Zonorai.Tenants.Domain;
 using Zonorai.Tenants.Domain.Claims;
 using Zonorai.Tenants.Domain.Common;
 using Zonorai.Tenants.Domain.Tenants;
@@ -32,7 +33,8 @@ namespace Zonorai.Tenants.Infrastructure.Services
 
         public async Task<LoginResult> Login(string email, string password)
         {
-            var user = await _context.Users.Include(x => x.Tenants).Include(x => x.Claims).ThenInclude(x => x.Claim)
+            var user = await _context.Users.Include(x => x.Tenants)
+                .Include(x => x.Claims).ThenInclude(x => x.Claim)
                 .SingleOrDefaultAsync(x => x.Email == email);
             if (user == null)
             {
@@ -57,8 +59,10 @@ namespace Zonorai.Tenants.Infrastructure.Services
 
         public async Task<LoginResult> Login(string email, string password, string tenantId)
         {
-            var user = await _context.Users.Include(x => x.Tenants).Include(x => x.Claims).ThenInclude(x => x.Claim)
+            var user = await _context.Users.Include(x => x.Tenants)
+                .Include(x => x.Claims).ThenInclude(x => x.Claim)
                 .SingleOrDefaultAsync(x => x.Email == email);
+            
             if (user == null)
             {
                 return new LoginResult(null, null, $"Account with Email '{email}' not found");
@@ -71,13 +75,13 @@ namespace Zonorai.Tenants.Infrastructure.Services
 
             return new LoginResult(null, null, "Password does not match stored password");
         }
-        
+
         public async Task<User> RegisterTenant(RegisterTenant registerTenant)
         {
             var validator = new RegisterTenantValidator();
-            
+
             (await validator.ValidateAsync(registerTenant)).ThrowIfFailed();
-            
+
             var tenant = new TenantInformation()
             {
                 Identifier = Guid.NewGuid().ToString(),
@@ -125,6 +129,7 @@ namespace Zonorai.Tenants.Infrastructure.Services
             {
                 return new LoginResult(null, null, $"Tenant with Id '{tenantId}' does not exist");
             }
+
             //Default Claims we need
             var claims = new List<Claim>
             {
@@ -132,12 +137,13 @@ namespace Zonorai.Tenants.Infrastructure.Services
                 new Claim(ClaimTypes.Surname, user.Surname),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim("Id", user.Id),
-                new Claim("TenantIdentifier", tenant.Identifier)
+                new Claim(TenantConstants.TenantIdentifier, tenant.Identifier),
+                new Claim(TenantConstants.TenantId, tenant.Id)
             };
 
 
             //Add RoleClaims
-            var storedClaims = GetUserClaims(user,tenantId);
+            var storedClaims = GetUserClaims(user, tenantId);
 
             if (storedClaims.Any())
             {

@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Zonorai.Tenants.Application.Common;
+using Zonorai.Tenants.ApplicationInterface.Claims.Queries.ListClaims;
 
 namespace Zonorai.Tenants.Application.Claims.Queries.ListClaims
 {
-    public class ListClaimsQuery : IRequest<List<Claim>>
-    {
-        
-    }
 
     public class ListClaimsQueryHandler : IRequestHandler<ListClaimsQuery, List<Claim>>
     {

@@ -2,7 +2,7 @@ using MediatR;
 
 namespace Zonorai.Tenants.ApplicationInterface.Users.Commands.Register
 {
-    public class RegisterCommand : IRequest<LoginResult>
+    public class RegisterCommand : IRequest<RegisterResult>
     {
         public string Company { get; set; }
         public string Website { get; set; }

@@ -21,7 +21,6 @@ namespace Zonorai.Tenants.Domain.Users
 
             Id = Guid.NewGuid().ToString();
             Email = createUser.Email;
-            Username = createUser.Username;
             Name = createUser.Name;
             Surname = createUser.Surname;
             byte[] salt = HashHelper.CreateSalt();
@@ -30,7 +29,6 @@ namespace Zonorai.Tenants.Domain.Users
         }
         public string Id { get; init; }
         public string Email { get; private set; }
-        public string Username { get; private set; }
         public string Name { get; private set; }
         public string Surname { get; private set; }
         public string Salt { get; private set; }
@@ -39,7 +37,7 @@ namespace Zonorai.Tenants.Domain.Users
         public DateTime? DateLocked { get; private set; }
         public int LoginAttempts { get; private set; } = 0;
         public string FullName => $"{Name} {Surname}";
-        
+        public bool EmailConfirmed { get; private set; }
         public List<UserClaim> Claims { get; set; }
         public List<TenantInformation> Tenants { get; set; }
         
@@ -58,12 +56,11 @@ namespace Zonorai.Tenants.Domain.Users
             FluentValueValidator<string>.Validate(surname,x => x.NotEmpty().NotNull());
             Surname = surname;
         }
-        public void SetUsername(string username)
-        {
-            FluentValueValidator<string>.Validate(username,x => x.NotEmpty().NotNull());
-            Username = username;
-        }
 
+        public void ConfirmEmail()
+        {
+            EmailConfirmed = true;
+        }
         public bool CanLogin(string password)
         {
             if (Locked)

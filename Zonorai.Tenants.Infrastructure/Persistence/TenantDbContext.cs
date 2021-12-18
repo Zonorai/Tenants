@@ -10,17 +10,15 @@ using Zonorai.Tenants.Domain.Users;
 
 namespace Zonorai.Tenants.Infrastructure.Persistence
 {
-    public class TenantDbContext : EFCoreStoreDbContext<TenantInformation>,ITenantDbContext
+    public class TenantDbContext : EFCoreStoreDbContext<TenantInformation>, ITenantDbContext
     {
-        private IMediator _mediator;
-        
-        public TenantDbContext(DbContextOptions<TenantDbContext> options, IMediator mediator) : base(options)
+        public TenantDbContext(DbContextOptions<TenantDbContext> options) : base(options)
         {
-            _mediator = mediator;
         }
+
         public DbSet<User> Users { get; set; }
         public DbSet<SecurityClaim> Claims { get; set; }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(TenantDbContext).Assembly);
@@ -29,9 +27,6 @@ namespace Zonorai.Tenants.Infrastructure.Persistence
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var result = await base.SaveChangesAsync(cancellationToken);
-
-            
             return await base.SaveChangesAsync(cancellationToken);
         }
     }

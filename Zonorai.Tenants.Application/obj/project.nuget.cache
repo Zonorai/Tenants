@@ -1,12 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "uP+RX4fIyqZO0eyi6FLh3cGlER3nMWxxS2Qf3/d/bxKxC0ZX+bncwK3Qwo04ZKTY7RGLx/HCPGlWPmhcu1td5g==",
+  "dgSpecHash": "SEBWhg05FaP1pO/cN/4nIuCR6NLUGceJVluem1b0QdrsYLqV4swuc61unwnekOPD9IO6Bw5kZMv3rFYqup7TMA==",
   "success": true,
   "projectFilePath": "/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Application/Zonorai.Tenants.Application.csproj",
   "expectedPackageFiles": [
     "/tmp/.nuget/packages/finbuckle.multitenant/6.5.0/finbuckle.multitenant.6.5.0.nupkg.sha512",
     "/tmp/.nuget/packages/finbuckle.multitenant.entityframeworkcore/6.5.0/finbuckle.multitenant.entityframeworkcore.6.5.0.nupkg.sha512",
-    "/tmp/.nuget/packages/fluentvalidation/10.3.4/fluentvalidation.10.3.4.nupkg.sha512",
+    "/tmp/.nuget/packages/fluentresults/3.1.0/fluentresults.3.1.0.nupkg.sha512",
+    "/tmp/.nuget/packages/fluentvalidation/10.3.6/fluentvalidation.10.3.6.nupkg.sha512",
+    "/tmp/.nuget/packages/fluentvalidation.dependencyinjectionextensions/10.3.6/fluentvalidation.dependencyinjectionextensions.10.3.6.nupkg.sha512",
     "/tmp/.nuget/packages/mediatr/9.0.0/mediatr.9.0.0.nupkg.sha512",
     "/tmp/.nuget/packages/mediatr.extensions.microsoft.dependencyinjection/9.0.0/mediatr.extensions.microsoft.dependencyinjection.9.0.0.nupkg.sha512",
     "/tmp/.nuget/packages/microsoft.aspnetcore.cryptography.internal/5.0.12/microsoft.aspnetcore.cryptography.internal.5.0.12.nupkg.sha512",

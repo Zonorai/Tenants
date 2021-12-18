@@ -5,7 +5,6 @@ namespace Zonorai.Tenants.Domain.Users
         string CompanyName,
         string CompanyWebsite,
         string Email,
-        string Username,
         string Name,
         string Surname,
         string Password
