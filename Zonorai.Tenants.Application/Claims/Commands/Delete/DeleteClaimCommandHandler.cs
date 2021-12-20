@@ -14,10 +14,11 @@ namespace Zonorai.Tenants.Application.Claims.Commands.Delete
     public class DeleteClaimCommandHandler : IRequestHandler<DeleteClaimCommand, Result>
     {
         private readonly ITenantDbContext _tenantDbContext;
-
-        public DeleteClaimCommandHandler(ITenantDbContext tenantDbContext)
+        private readonly IEventStore _eventStore;
+        public DeleteClaimCommandHandler(ITenantDbContext tenantDbContext,IEventStore eventStore)
         {
             _tenantDbContext = tenantDbContext;
+            _eventStore = eventStore;
         }
 
         public async Task<Result> Handle(DeleteClaimCommand request, CancellationToken cancellationToken)
@@ -26,7 +27,9 @@ namespace Zonorai.Tenants.Application.Claims.Commands.Delete
             {
                 var claim = await _tenantDbContext.Claims.SingleOrDefaultAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
                 _tenantDbContext.Claims.Remove(claim);
+                await _eventStore.AddEvent(new ClaimDeletedEvent(claim.Id,DateTime.Now));
                 await _tenantDbContext.SaveChangesAsync(cancellationToken);
+                
                 return Result.Ok();
             }
             catch(Exception e)

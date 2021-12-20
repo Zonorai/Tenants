@@ -13,7 +13,7 @@ namespace Zonorai.Tenants.Domain.Users
         {
             CreateUserValidator validator = new CreateUserValidator();
             var validationResult = validator.Validate(createUser);
-            
+
             if (validationResult.IsValid == false)
             {
                 throw new ValidationException(validationResult.Errors);
@@ -23,11 +23,18 @@ namespace Zonorai.Tenants.Domain.Users
             Email = createUser.Email;
             Name = createUser.Name;
             Surname = createUser.Surname;
-            byte[] salt = HashHelper.CreateSalt();
-            Password = HashHelper.HashPassword(createUser.Password, salt);
-            Salt = Convert.ToBase64String(salt);
+            if (string.IsNullOrEmpty(createUser.PhoneNumber) == false)
+            {
+                PhoneNumber = createUser.PhoneNumber;
+            }
+            SetPassword(createUser.Password);
         }
-        public string Id { get; init; }
+
+        private User()
+        {
+        }
+
+        public string Id { get; private set; }
         public string Email { get; private set; }
         public string Name { get; private set; }
         public string Surname { get; private set; }
@@ -35,31 +42,74 @@ namespace Zonorai.Tenants.Domain.Users
         public string Password { get; private set; }
         public bool Locked { get; private set; } = false;
         public DateTime? DateLocked { get; private set; }
+        public string PhoneNumber { get; private set; }
         public int LoginAttempts { get; private set; } = 0;
         public string FullName => $"{Name} {Surname}";
         public bool EmailConfirmed { get; private set; }
-        public List<UserClaim> Claims { get; set; }
-        public List<TenantInformation> Tenants { get; set; }
-        
+        public List<UserClaim> Claims { get; set; } = new List<UserClaim>();
+        public List<TenantInformation> Tenants { get; set; } = new List<TenantInformation>();
+
         public void SetEmail(string email)
         {
-           FluentValueValidator<string>.Validate(email,x => x.NotEmpty().NotNull().EmailAddress());
-           Email = email;
+            FluentValueValidator<string>.Validate(email, x => x.NotEmpty().NotNull().EmailAddress());
+            Email = email;
         }
+
         public void SetName(string name)
         {
-            FluentValueValidator<string>.Validate(name,x => x.NotEmpty().NotNull());
+            FluentValueValidator<string>.Validate(name, x => x.NotEmpty().NotNull());
             Name = name;
+        }
+
+        public void SetPhoneNumber(string phoneNumber)
+        {
+            FluentValueValidator<string>.Validate(phoneNumber, x => x.NotEmpty().NotNull());
+            PhoneNumber = phoneNumber;
         }
         public void SetSurname(string surname)
         {
-            FluentValueValidator<string>.Validate(surname,x => x.NotEmpty().NotNull());
+            FluentValueValidator<string>.Validate(surname, x => x.NotEmpty().NotNull());
             Surname = surname;
         }
 
         public void ConfirmEmail()
         {
             EmailConfirmed = true;
+        }
+
+        private void ValidatePassword(string password)
+        {
+            FluentValueValidator<string>.Validate(password, x => x.Password());
+        }
+
+        private bool ComparePassword(string password)
+        {
+            string testHash = HashHelper.HashPassword(password, Convert.FromBase64String(Salt));
+
+            if (testHash == Password)
+            {
+                return true;
+            }
+
+            return false;
+        }
+        public void UpdatePassword(string old,string updated)
+        {
+            bool isMatch = ComparePassword(old);
+            if (!isMatch)
+            {
+                throw new Exception("Password does not match stored password");
+            }
+            ValidatePassword(updated);
+            SetPassword(updated);
+        }
+
+        public void SetPassword(string password)
+        {
+            ValidatePassword(password);
+            byte[] salt = HashHelper.CreateSalt();
+            Password = HashHelper.HashPassword(password, salt);
+            Salt = Convert.ToBase64String(salt);
         }
         public bool CanLogin(string password)
         {
@@ -70,9 +120,9 @@ namespace Zonorai.Tenants.Domain.Users
                     DateLocked = DateTime.Now;
                     return false;
                 }
-                
+
                 bool canUnlock = DateLocked != null && DateTime.Now > DateLocked.Value.AddMinutes(5);
-                
+
                 if (canUnlock)
                 {
                     Locked = false;
@@ -81,25 +131,24 @@ namespace Zonorai.Tenants.Domain.Users
 
                 if (canUnlock == false)
                 {
-                    throw new Exception("User has exceeded login attempts, please try again later");
+                    throw new Exception("User has exceeded login attempts, please try again in 5 minutes");
                 }
-                
-            }
-            FluentValueValidator<string>.Validate(password,x => x.NotEmpty().NotNull().MinimumLength(8));
-            string testHash = HashHelper.HashPassword(password, Convert.FromBase64String(Salt));
-            
-            if (testHash == Password)
-            {
-                return true;
             }
 
+            ValidatePassword(password);
+
+            if (ComparePassword(password))
+            {
+                LoginAttempts = 0;
+                return true;
+            }
             LoginAttempts++;
             if (LoginAttempts == 5)
             {
                 Locked = true;
                 DateLocked = DateTime.Now;
             }
-            
+
             return false;
         }
     }

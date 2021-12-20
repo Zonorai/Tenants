@@ -1,14 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-        <Authors>Carel vd Merwe</Authors>
+        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+        <Version>1.0.6</Version>
+        <Authors>Zonorai</Authors>
+        <PackageId>Zonorai.Tenants.Domain</PackageId>
+        <Description>Domain layer for Zonorai.Tenants</Description>
+        <Copyright>Copyright Zonorai</Copyright>
+        <PackageTags>tenants;users;claims;authentication</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Company>Zonorai</Company>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <RepositoryUrl>https://github.com/Zonorai/Tenants</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
-    
-    <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="10.3.4" />
-        <PackageReference Include="Finbuckle.MultiTenant" Version="6.5.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="5.0.13" />
+    <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+        <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="5.0.13"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+        <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.1"/>
     </ItemGroup>
     
+    <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="10.3.6"/>
+        <PackageReference Include="Finbuckle.MultiTenant" Version="6.5.0"/>
+    </ItemGroup>
+
 </Project>

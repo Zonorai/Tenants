@@ -17,11 +17,12 @@ namespace Zonorai.Tenants.Application.UserClaims.Commands.Add
     {
         private readonly ITenantDbContext _tenantDbContext;
         private readonly ITenantInfo _tenantInfo;
-
-        public AddClaimToUserCommandHandler(ITenantDbContext tenantDbContext, ITenantInfo tenantInfo)
+        private readonly IEventStore _eventStore;
+        public AddClaimToUserCommandHandler(ITenantDbContext tenantDbContext, ITenantInfo tenantInfo, IEventStore eventStore)
         {
             _tenantDbContext = tenantDbContext;
             _tenantInfo = tenantInfo;
+            _eventStore = eventStore;
         }
 
         public async Task<Result> Handle(AddClaimToUserCommand request, CancellationToken cancellationToken)
@@ -42,7 +43,9 @@ namespace Zonorai.Tenants.Application.UserClaims.Commands.Add
 
             user.Claims.Add(new UserClaim(claim.Id, user.Id, _tenantInfo.Id));
             _tenantDbContext.Users.Update(user);
+            await _eventStore.AddEvent(new ClaimAddedToUserEvent(claim.Id, user.Id, DateTime.Now));
             await _tenantDbContext.SaveChangesAsync(cancellationToken);
+            
             return Result.Ok();
         }
     }

@@ -25,3 +25,8 @@
 /home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Application/obj/Debug/net5.0/Zonorai.Tenants.Application.dll
 /home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Application/obj/Debug/net5.0/ref/Zonorai.Tenants.Application.dll
 /home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Application/obj/Debug/net5.0/Zonorai.Tenants.Application.pdb
+/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Application/bin/Debug/net5.0/Zonorai.Tenants.ApplicationInterface.dll
+/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Application/bin/Debug/net5.0/Zonorai.Tenants.Domain.dll
+/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Application/bin/Debug/net5.0/Zonorai.Tenants.ApplicationInterface.pdb
+/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Application/bin/Debug/net5.0/Zonorai.Tenants.Domain.pdb
+/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Application/obj/Debug/net5.0/Zonorai.Tenants.Application.csproj.CopyComplete

@@ -18,23 +18,44 @@ namespace Zonorai.Tenants.Infrastructure
         public static IServiceCollection AddTenantsInfrastructure(this IServiceCollection services,
             IConfiguration configuration, Assembly migrationsAssembly = null)
         {
-            var section = configuration.GetSection(nameof(TenantsConfiguration));
+            var section = configuration.GetSection(nameof(TenantInfrastructureConfiguration));
             if (section == null)
             {
                 throw new InvalidOperationException(
-                    $"Cannot add Multi Tenancy without the configuration for type {nameof(TenantsConfiguration)}");
+                    $"Cannot add Multi Tenancy without the configuration for type {nameof(TenantInfrastructureConfiguration)}");
             }
 
-            var config = new TenantsConfiguration();
+            var config = new TenantInfrastructureConfiguration();
             section.Bind(config);
-            services.Configure<TenantsConfiguration>(section);
+            services.Configure<TenantInfrastructureConfiguration>(section);
 
+            return services;
+        }
+
+        public static IServiceCollection AddTenantsInfrastructure(this IServiceCollection services,
+            Action<TenantInfrastructureConfiguration> configurationAction, Assembly migrationsAssembly = null)
+        {
+            var config = new TenantInfrastructureConfiguration();
+            configurationAction.Invoke(config);
+            services.Configure<TenantInfrastructureConfiguration>(configurationAction);
+            services.AddInfrastructure(config);
+            return services;
+        }
+
+        private static IServiceCollection AddInfrastructure(this IServiceCollection services,
+            TenantInfrastructureConfiguration config, Assembly migrationsAssembly = null)
+        {
             services.AddDbContext<TenantDbContext>(x =>
-                x.UseSqlServer(section.GetValue<string>(nameof(TenantsConfiguration.DbConnection)), y =>
+                x.UseSqlServer(config.DbConnection, y =>
                 {
                     if (migrationsAssembly != null)
                     {
                         y.MigrationsAssembly(migrationsAssembly.FullName);
+                    }
+
+                    if (migrationsAssembly == null)
+                    {
+                        y.MigrationsAssembly(typeof(DependencyInjection).Assembly.FullName);
                     }
                 }));
 
@@ -44,7 +65,8 @@ namespace Zonorai.Tenants.Infrastructure
                 .WithEFCoreStore<TenantDbContext, TenantInformation>();
 
             services.AddTransient<ITokenService, TokenService>();
-
+            services.AddTransient<IUserService, UserService>();
+            services.AddScoped<IEventStore, EventStore>();
             services.AddAuthentication(auth =>
                 {
                     auth.DefaultAuthenticateScheme =
@@ -70,11 +92,8 @@ namespace Zonorai.Tenants.Infrastructure
                         };
                 });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("CanPurge", policy => policy.RequireRole("Owner"));
-            });
-            
+            services.AddAuthorization();
+
             return services;
         }
     }

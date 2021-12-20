@@ -4,9 +4,15 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Finbuckle.MultiTenant;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Zonorai.Tenants.Application.Common;
 using Zonorai.Tenants.Application.Users.Commands;
+using Zonorai.Tenants.Application.Users.Commands.Login;
+using Zonorai.Tenants.Application.Users.Commands.Register;
+using Zonorai.Tenants.Application.Users.Commands.TryLogin;
+using Zonorai.Tenants.ApplicationInterface.Users.Commands;
 using Zonorai.Tenants.Domain;
 using Zonorai.Tenants.Domain.Claims;
 using Zonorai.Tenants.Domain.Common;
@@ -22,13 +28,17 @@ namespace Zonorai.Tenants.Infrastructure.Services
         private readonly TenantDbContext _context;
         private readonly IMultiTenantStore<TenantInformation> _tenantStore;
         private readonly ITokenService _tokenService;
+        private readonly IOptions<TenantApplicationConfiguration> _options;
+        private readonly IEventStore _eventStore;
 
         public UserService(TenantDbContext context, IMultiTenantStore<TenantInformation> tenantStore,
-            ITokenService tokenService)
+            ITokenService tokenService, IOptions<TenantApplicationConfiguration> options, IEventStore eventStore)
         {
             _context = context;
             _tenantStore = tenantStore;
             _tokenService = tokenService;
+            _options = options;
+            _eventStore = eventStore;
         }
 
         public async Task<LoginResult> Login(string email, string password)
@@ -36,11 +46,12 @@ namespace Zonorai.Tenants.Infrastructure.Services
             var user = await _context.Users.Include(x => x.Tenants)
                 .Include(x => x.Claims).ThenInclude(x => x.Claim)
                 .SingleOrDefaultAsync(x => x.Email == email);
+
             if (user == null)
             {
                 return new LoginResult(null, null, $"Account with Email '{email}' not found");
             }
-
+            
             if (user.CanLogin(password))
             {
                 if (user.Tenants.Count == 1)
@@ -50,10 +61,23 @@ namespace Zonorai.Tenants.Infrastructure.Services
 
                 if (user.Tenants.Count > 1)
                 {
-                    return new LoginResult(null, user.Tenants, null);
+                    List<TenantInformationDto> dtos = new List<TenantInformationDto>();
+                    user.Tenants.ForEach(x =>
+                    {
+                        dtos.Add(new TenantInformationDto()
+                        {
+                            ConnectionString = x.ConnectionString,
+                            Id = x.Id,
+                            Identifier = x.Identifier,
+                            Website = x.Website,
+                            Name = x.Name
+                        });
+                    });
+                    return new LoginResult(null, dtos, null);
                 }
             }
-
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
             return new LoginResult(null, null, "Password does not match stored password");
         }
 
@@ -62,7 +86,7 @@ namespace Zonorai.Tenants.Infrastructure.Services
             var user = await _context.Users.Include(x => x.Tenants)
                 .Include(x => x.Claims).ThenInclude(x => x.Claim)
                 .SingleOrDefaultAsync(x => x.Email == email);
-            
+
             if (user == null)
             {
                 return new LoginResult(null, null, $"Account with Email '{email}' not found");
@@ -70,6 +94,7 @@ namespace Zonorai.Tenants.Infrastructure.Services
 
             if (user.CanLogin(password))
             {
+                
                 return await Login(user, tenantId);
             }
 
@@ -97,8 +122,8 @@ namespace Zonorai.Tenants.Infrastructure.Services
                 throw new Exception("Could not register user");
             }
 
-            var createUser = new CreateUser(registerTenant.Email, registerTenant.Username, registerTenant.Name,
-                registerTenant.Surname, registerTenant.Password);
+            var createUser = new CreateUser(registerTenant.Email, registerTenant.Name,
+                registerTenant.Surname, registerTenant.Password, registerTenant.PhoneNumber);
 
             var user = new User(createUser);
 
@@ -118,22 +143,34 @@ namespace Zonorai.Tenants.Infrastructure.Services
             user.Claims.Add(new UserClaim(adminClaim.Id, user.Id, tenant.Id));
             user.Claims.Add(new UserClaim(ownerClaim.Id, user.Id, tenant.Id));
             _context.Users.Add(user);
+            await _eventStore.AddEvent(new TenantRegisteredEvent(user.Id, user.Email, tenant.Name, user.Name,
+                user.Surname, user.Tenants.First().Id, DateTime.Now));
             await _context.SaveChangesAsync();
             return user;
         }
 
         private async Task<LoginResult> Login(User user, string tenantId)
         {
+            if (_options.Value.RequireConfirmedEmailForLogin)
+            {
+                if (user.EmailConfirmed == false)
+                {
+                    return new LoginResult(null, null, "Email must be confirmed before login");
+                }
+            }
+            await _eventStore.AddEvent(new UserLoggedInEvent(user.Email, tenantId, DateTime.Now));
             var tenant = await _tenantStore.TryGetAsync(tenantId);
             if (tenant == null)
             {
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
                 return new LoginResult(null, null, $"Tenant with Id '{tenantId}' does not exist");
             }
 
             //Default Claims we need
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.GivenName, user.Name),
                 new Claim(ClaimTypes.Surname, user.Surname),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim("Id", user.Id),
@@ -151,7 +188,8 @@ namespace Zonorai.Tenants.Infrastructure.Services
             }
 
             var token = _tokenService.GenerateToken(new ClaimsIdentity(claims));
-
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
             return new LoginResult(token, null, null);
         }
 

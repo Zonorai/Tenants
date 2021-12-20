@@ -17,6 +17,10 @@ namespace Zonorai.Tenants.Domain.UserClaims
             TenantId = tenantId;
         }
 
+        private UserClaim()
+        {
+            
+        }
         public string ClaimId { get; private set; }
 
         public SecurityClaim Claim { get; private set; }

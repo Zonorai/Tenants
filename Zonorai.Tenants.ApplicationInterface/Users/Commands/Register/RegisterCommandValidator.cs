@@ -1,4 +1,5 @@
 using FluentValidation;
+using Zonorai.Tenants.ApplicationInterface.Common;
 
 namespace Zonorai.Tenants.ApplicationInterface.Users.Commands.Register;
 
@@ -11,7 +12,6 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
         RuleFor(x => x.Name).NotEmpty().NotNull();
         RuleFor(x => x.Surname).NotEmpty().NotNull();
         RuleFor(x => x.Website).NotEmpty().NotNull();
-        RuleFor(x => x.Password).Matches(@"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$").WithMessage(
-            "Password must be minimum eight characters, at least one letter, one number and one special character");
+        RuleFor(x => x.Password).Password();
     }
 }

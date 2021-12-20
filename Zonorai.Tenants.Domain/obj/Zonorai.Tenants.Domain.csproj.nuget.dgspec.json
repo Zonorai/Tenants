@@ -5,7 +5,7 @@
   },
   "projects": {
     "/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Domain/Zonorai.Tenants.Domain.csproj": {
-      "version": "1.0.0",
+      "version": "1.0.6",
       "restore": {
         "projectUniqueName": "/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Domain/Zonorai.Tenants.Domain.csproj",
         "projectName": "Zonorai.Tenants.Domain",
@@ -13,11 +13,13 @@
         "packagesPath": "/tmp/.nuget/packages/",
         "outputPath": "/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants.Domain/obj/",
         "projectStyle": "PackageReference",
+        "crossTargeting": true,
         "configFilePaths": [
           "/tmp/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "net5.0"
+          "net5.0",
+          "net6.0"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
@@ -25,6 +27,10 @@
         "frameworks": {
           "net5.0": {
             "targetAlias": "net5.0",
+            "projectReferences": {}
+          },
+          "net6.0": {
+            "targetAlias": "net6.0",
             "projectReferences": {}
           }
         },
@@ -44,11 +50,44 @@
             },
             "FluentValidation": {
               "target": "Package",
-              "version": "[10.3.4, )"
+              "version": "[10.3.6, )"
             },
             "Microsoft.AspNetCore.Cryptography.KeyDerivation": {
               "target": "Package",
               "version": "[5.0.13, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.101/RuntimeIdentifierGraph.json"
+        },
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Finbuckle.MultiTenant": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            },
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[10.3.6, )"
+            },
+            "Microsoft.AspNetCore.Cryptography.KeyDerivation": {
+              "target": "Package",
+              "version": "[6.0.1, )"
             }
           },
           "imports": [

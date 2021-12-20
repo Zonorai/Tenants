@@ -5,6 +5,7 @@ namespace Zonorai.Tenants.Domain.Users
         string Email,
         string Name,
         string Surname,
-        string Password
+        string Password,
+        string? PhoneNumber
     );
 }

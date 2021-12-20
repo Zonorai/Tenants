@@ -17,11 +17,12 @@ namespace Zonorai.Tenants.Application.UserClaims.Commands.Delete
     {
         private readonly ITenantDbContext _tenantDbContext;
         private readonly ITenantInfo _tenantInfo;
-
-        public RemoveClaimFromUserCommandHandler(ITenantInfo tenantInfo, ITenantDbContext tenantDbContext)
+        private readonly IEventStore _eventStore;
+        public RemoveClaimFromUserCommandHandler(ITenantInfo tenantInfo, ITenantDbContext tenantDbContext, IEventStore eventStore)
         {
             _tenantInfo = tenantInfo;
             _tenantDbContext = tenantDbContext;
+            _eventStore = eventStore;
         }
 
         public async Task<Result> Handle(RemoveClaimFromUserCommand request, CancellationToken cancellationToken)
@@ -43,7 +44,9 @@ namespace Zonorai.Tenants.Application.UserClaims.Commands.Delete
             var userClaim = user.Claims.SingleOrDefault(x => x.ClaimId == request.ClaimId);
             user.Claims.Remove(userClaim);
             _tenantDbContext.Users.Update(user);
+            await _eventStore.AddEvent(new ClaimRemovedFromUserEvent(claim.Id, user.Id, DateTime.Now));
             await _tenantDbContext.SaveChangesAsync(cancellationToken);
+            
             return Result.Ok();
         }
     }

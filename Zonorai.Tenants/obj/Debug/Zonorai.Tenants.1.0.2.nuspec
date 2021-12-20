@@ -7,9 +7,12 @@
     <description>A Package consuming Finbuckle.MultiTenant using Claim Strategy and EF Store</description>
     <dependencies>
       <group targetFramework="net5.0">
+        <dependency id="Zonorai.Tenants.Application" version="1.0.6" exclude="Build,Analyzers" />
+        <dependency id="Zonorai.Tenants.Infrastructure" version="1.0.5" exclude="Build,Analyzers" />
         <dependency id="Finbuckle.MultiTenant" version="6.5.0" exclude="Build,Analyzers" />
         <dependency id="Finbuckle.MultiTenant.AspNetCore" version="6.5.0" exclude="Build,Analyzers" />
         <dependency id="Finbuckle.MultiTenant.EntityFrameworkCore" version="6.5.0" exclude="Build,Analyzers" />
+        <dependency id="FluentValidation" version="10.3.6" exclude="Build,Analyzers" />
         <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="5.0.12" exclude="Build,Analyzers" />
       </group>
     </dependencies>
@@ -20,7 +23,7 @@
     </frameworkReferences>
   </metadata>
   <files>
-    <file src="/home/zonorai/Code/libraries/Tenants/Zonorai.Tenants/bin/Debug/net5.0/Zonorai.Tenants.runtimeconfig.json" target="lib/net5.0/Zonorai.Tenants.runtimeconfig.json" />
-    <file src="/home/zonorai/Code/libraries/Tenants/Zonorai.Tenants/bin/Debug/net5.0/Zonorai.Tenants.dll" target="lib/net5.0/Zonorai.Tenants.dll" />
+    <file src="/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants/bin/Debug/net5.0/Zonorai.Tenants.runtimeconfig.json" target="lib/net5.0/Zonorai.Tenants.runtimeconfig.json" />
+    <file src="/home/zonorai/Code/Code/libraries/Tenants/Zonorai.Tenants/bin/Debug/net5.0/Zonorai.Tenants.dll" target="lib/net5.0/Zonorai.Tenants.dll" />
   </files>
 </package>

@@ -9,7 +9,7 @@ namespace Zonorai.Tenants.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<SecurityClaim> builder)
         {
-            builder.HasMany<UserClaim>().WithOne(x => x.Claim).HasForeignKey("ClaimId");
+            builder.HasMany<UserClaim>().WithOne(x => x.Claim).HasForeignKey(x => x.ClaimId);
             builder.ToTable("Claims");
         }
     }

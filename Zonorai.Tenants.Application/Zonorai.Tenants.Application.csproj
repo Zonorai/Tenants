@@ -1,19 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
+    <Version>1.0.6</Version>
+    <Authors>Zonorai</Authors>
+    <PackageId>Zonorai.Tenants.Application</PackageId>
+    <Description>Application layer for Zonorai.Tenants</Description>
+    <Copyright>Copyright Zonorai</Copyright>
+    <PackageTags>tenants;users;claims;authentication</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Company>Zonorai</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/Zonorai/Tenants</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Finbuckle.MultiTenant.EntityFrameworkCore" Version="6.5.0" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="Zonorai.Tenants.Domain" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Zonorai.Tenants.ApplicationInterface\Zonorai.Tenants.ApplicationInterface.csproj" />
+    <ProjectReference Include="..\Zonorai.Tenants.Domain\Zonorai.Tenants.Domain.csproj" />
   </ItemGroup>
 
 </Project>

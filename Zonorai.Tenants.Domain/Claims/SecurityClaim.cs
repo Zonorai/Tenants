@@ -15,6 +15,11 @@ namespace Zonorai.Tenants.Domain.Claims
             Type = type;
             Value = value;
         }
+
+        private SecurityClaim()
+        {
+            
+        }
         public string Id { get; private set; }
         public string Value { get; private set; }
         public string Type { get; private set; }

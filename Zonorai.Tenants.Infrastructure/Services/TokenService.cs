@@ -10,9 +10,9 @@ namespace Zonorai.Tenants.Infrastructure.Services
 {
     internal class TokenService : ITokenService
     {
-        private readonly IOptions<TenantsConfiguration> _config;
+        private readonly IOptions<TenantInfrastructureConfiguration> _config;
 
-        public TokenService(IOptions<TenantsConfiguration> config)
+        public TokenService(IOptions<TenantInfrastructureConfiguration> config)
         {
             _config = config;
         }
@@ -56,9 +56,9 @@ namespace Zonorai.Tenants.Infrastructure.Services
             return new SecurityTokenDescriptor
             {
                 Subject = claims,
-                Expires = DateTime.UtcNow.AddDays(2),
-                //Issuer = _config.ValidIssuer,
-                //Audience = _config.ValidAudience,
+                Expires = DateTime.UtcNow.AddHours(_config.Value.JwtExpirationInHours),
+                Issuer = _config.Value.ValidIssuer,
+                Audience = _config.Value.ValidAudience,
                 SigningCredentials = _config.Value.SigningCredentials
             };
         }

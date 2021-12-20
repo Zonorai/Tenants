@@ -1,16 +1,40 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <Version>1.0.5</Version>
+        <Authors>Zonorai</Authors>
+        <PackageId>Zonorai.Tenants.Infrastructure</PackageId>
+        <Description>Application layer for Zonorai.Tenants</Description>
+        <Copyright>Copyright Zonorai</Copyright>
+        <PackageTags>tenants;users;claims;authentication</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Company>Zonorai</Company>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <RepositoryUrl>https://github.com/Zonorai/Tenants</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.13" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.12" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.13" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />
-    <PackageReference Include="Finbuckle.MultiTenant.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="Finbuckle.MultiTenant.EntityFrameworkCore" Version="6.5.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.12" />
-    <PackageReference Include="Zonorai.Tenants.Application" Version="1.0.3" />
-  </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Finbuckle.MultiTenant.AspNetCore" Version="6.5.0" />
+        <PackageReference Include="Finbuckle.MultiTenant.EntityFrameworkCore" Version="6.5.0" />
+        
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Zonorai.Tenants.Application\Zonorai.Tenants.Application.csproj" />
+    </ItemGroup>
 
 </Project>

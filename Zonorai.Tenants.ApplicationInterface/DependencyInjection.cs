@@ -5,7 +5,7 @@ namespace Zonorai.Tenants.ApplicationInterface;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddTenantApplicationInterface(this IServiceCollection services)
+    public static IServiceCollection AddTenantsApplicationInterface(this IServiceCollection services)
     {
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
         return services;
