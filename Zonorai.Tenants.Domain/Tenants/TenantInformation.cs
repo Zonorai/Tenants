@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Finbuckle.MultiTenant;
+using Zonorai.Tenants.Domain.Claims;
 using Zonorai.Tenants.Domain.Users;
 
 namespace Zonorai.Tenants.Domain.Tenants
@@ -12,5 +13,6 @@ namespace Zonorai.Tenants.Domain.Tenants
         public string ConnectionString { get; set; }
         public string Website { get; set; }
         public List<User> Users { get; set; } = new List<User>();
+        public List<SecurityClaim> Claims { get; set; } = new List<SecurityClaim>();
     }
 }

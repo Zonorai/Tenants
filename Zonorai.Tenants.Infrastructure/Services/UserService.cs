@@ -4,11 +4,15 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Finbuckle.MultiTenant;
+using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Zonorai.Tenants.Application.Common;
+using Zonorai.Tenants.Application.Common.Configuration;
 using Zonorai.Tenants.Application.Users.Commands;
+using Zonorai.Tenants.Application.Users.Commands.Add;
+using Zonorai.Tenants.Application.Users.Commands.Delete;
 using Zonorai.Tenants.Application.Users.Commands.Login;
 using Zonorai.Tenants.Application.Users.Commands.Register;
 using Zonorai.Tenants.Application.Users.Commands.TryLogin;
@@ -30,15 +34,73 @@ namespace Zonorai.Tenants.Infrastructure.Services
         private readonly ITokenService _tokenService;
         private readonly IOptions<TenantApplicationConfiguration> _options;
         private readonly IEventStore _eventStore;
+        private readonly ITenantInfo _tenantInfo;
 
         public UserService(TenantDbContext context, IMultiTenantStore<TenantInformation> tenantStore,
-            ITokenService tokenService, IOptions<TenantApplicationConfiguration> options, IEventStore eventStore)
+            ITokenService tokenService, IOptions<TenantApplicationConfiguration> options, IEventStore eventStore,
+            ITenantInfo tenantInfo)
         {
             _context = context;
             _tenantStore = tenantStore;
             _tokenService = tokenService;
-            _options = options;
             _eventStore = eventStore;
+            _tenantInfo = tenantInfo;
+            _options = options;
+        }
+
+        public async Task<Result> AddUser(CreateUser createUser)
+        {
+            var tenant = await _context.TenantInfo.SingleOrDefaultAsync(x => x.Id == _tenantInfo.Id);
+            if (tenant == null)
+            {
+                return Result.Fail("Tenant Information not found");
+            }
+
+            User user;
+            if (_context.Users.Any(x => x.Email == createUser.Email))
+            {
+                user = await _context.Users.Include(x => x.Tenants)
+                    .SingleOrDefaultAsync(x => x.Email == createUser.Email);
+                if (user.Tenants.Any(x => x.Id == _tenantInfo.Id))
+                {
+                    return Result.Fail($"User with email {createUser.Email} is already a part of your organization");
+                }
+            }
+            else
+            {
+                user = new User(createUser);
+            }
+
+            user.Tenants.Add(tenant);
+            _context.Users.Update(user);
+            await _eventStore.AddEvent(new UserAddedEvent(user.Id, user.Email, user.Name, user.Surname, _tenantInfo.Id,
+                DateTime.Now));
+            await _context.SaveChangesAsync();
+            return Result.Ok();
+        }
+
+        public async Task<Result> DeleteUser(string userId)
+        {
+            var tenant = await _context.TenantInfo.SingleOrDefaultAsync(x => x.Id == _tenantInfo.Id);
+            if (tenant == null)
+            {
+                return Result.Fail("Tenant Information not found");
+            }
+
+            User user = await _context.Users.Include(x => x.Tenants).SingleOrDefaultAsync(x => x.Id == userId);
+            await _eventStore.AddEvent(new UserDeletedEvent(user.Id, _tenantInfo.Id,
+                DateTime.Now));
+            if (user.Tenants.Count ! > 1)
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                return Result.Ok();
+            }
+
+            user.Tenants.Remove(tenant);
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return Result.Ok();
         }
 
         public async Task<LoginResult> Login(string email, string password)
@@ -51,7 +113,7 @@ namespace Zonorai.Tenants.Infrastructure.Services
             {
                 return new LoginResult(null, null, $"Account with Email '{email}' not found");
             }
-            
+
             if (user.CanLogin(password))
             {
                 if (user.Tenants.Count == 1)
@@ -76,6 +138,7 @@ namespace Zonorai.Tenants.Infrastructure.Services
                     return new LoginResult(null, dtos, null);
                 }
             }
+
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
             return new LoginResult(null, null, "Password does not match stored password");
@@ -94,7 +157,6 @@ namespace Zonorai.Tenants.Infrastructure.Services
 
             if (user.CanLogin(password))
             {
-                
                 return await Login(user, tenantId);
             }
 
@@ -132,8 +194,8 @@ namespace Zonorai.Tenants.Infrastructure.Services
 
             if (adminClaim == null || ownerClaim == null)
             {
-                ownerClaim = new SecurityClaim(ClaimTypes.Role, "Owner");
-                adminClaim = new SecurityClaim(ClaimTypes.Role, "Admin");
+                ownerClaim = new SecurityClaim(ClaimTypes.Role, "Owner", tenant.Id);
+                adminClaim = new SecurityClaim(ClaimTypes.Role, "Admin", tenant.Id);
                 _context.Claims.Add(adminClaim);
                 _context.Claims.Add(ownerClaim);
                 await _context.SaveChangesAsync();
@@ -158,6 +220,7 @@ namespace Zonorai.Tenants.Infrastructure.Services
                     return new LoginResult(null, null, "Email must be confirmed before login");
                 }
             }
+
             await _eventStore.AddEvent(new UserLoggedInEvent(user.Email, tenantId, DateTime.Now));
             var tenant = await _tenantStore.TryGetAsync(tenantId);
             if (tenant == null)

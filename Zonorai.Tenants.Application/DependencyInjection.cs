@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Zonorai.Tenants.Application.Common;
 using Zonorai.Tenants.Application.Common.Behaviours;
+using Zonorai.Tenants.Application.Common.Configuration;
 using Zonorai.Tenants.ApplicationInterface;
 using Zonorai.Tenants.ApplicationInterface.Claims.Commands.Create;
 

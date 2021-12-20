@@ -1,3 +1,4 @@
+using Finbuckle.MultiTenant.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Zonorai.Tenants.Domain.Claims;
@@ -10,6 +11,7 @@ namespace Zonorai.Tenants.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<SecurityClaim> builder)
         {
             builder.HasMany<UserClaim>().WithOne(x => x.Claim).HasForeignKey(x => x.ClaimId);
+            builder.IsMultiTenant();
             builder.ToTable("Claims");
         }
     }

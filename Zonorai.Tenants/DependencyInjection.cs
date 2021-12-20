@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Zonorai.Tenants.Application;
 using Zonorai.Tenants.Application.Common;
+using Zonorai.Tenants.Application.Common.Configuration;
 using Zonorai.Tenants.ApplicationInterface;
 using Zonorai.Tenants.Infrastructure;
 using Zonorai.Tenants.Infrastructure.Configuration;

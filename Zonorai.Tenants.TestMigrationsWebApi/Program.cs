@@ -20,6 +20,27 @@ builder.Services.AddZonoraiMultiTenancy(builder.Configuration,
     {
         x.RequireConfirmedEmailForLogin = true;
     });
+builder.Services.AddZonoraiMultiTenancy(builder.Configuration,
+    tenantInfrastructureConfiguration: (x) =>
+    {
+        x.JWTSecret = "SomeBase64String";
+        x.DbConnection = "SomeSqlConnection";
+        x.JwtExpirationInHours = 48;
+        x.ValidAudience = "www.somewhere.com";
+        x.ValidIssuer = "www.someissues.com";
+    });
+builder.Services.AddZonoraiMultiTenancy((configuration) =>
+    {
+        configuration.RequireConfirmedEmailForLogin = true;
+    },
+    tenantInfrastructureConfiguration: (x) =>
+    {
+        x.JWTSecret = "SomeBase64String";
+        x.DbConnection = "SomeSqlConnection";
+        x.JwtExpirationInHours = 48;
+        x.ValidAudience = "www.somewhere.com";
+        x.ValidIssuer = "www.someissues.com";
+    });
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("CanPurge2", policy => policy.RequireRole("Owner2"));
@@ -30,7 +51,9 @@ builder.Services.AddDbContext<CustomDbContext>(x =>
             .GetValue<string>(nameof(TenantInfrastructureConfiguration.DbConnection)),
         y => y.MigrationsAssembly(typeof(Program).Assembly.FullName)));
 var app = builder.Build();
-
+app.UseMultiTenant();
+app.UseAuthentication();
+app.UseAuthentication();
 var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<CustomDbContext>();
 await context.Database.MigrateAsync();
