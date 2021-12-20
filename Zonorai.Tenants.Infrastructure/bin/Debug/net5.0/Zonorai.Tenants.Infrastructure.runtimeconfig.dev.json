@@ -1,8 +1,0 @@
-{
-  "runtimeOptions": {
-    "additionalProbingPaths": [
-      "/home/zonorai/.dotnet/store/|arch|/|tfm|",
-      "/tmp/.nuget/packages"
-    ]
-  }
-}
