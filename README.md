@@ -1,3 +1,4 @@
+
 # Zonorai.Tenants :rocket:
 # Powered By [![N|Solid](https://www.finbuckle.com/images/favicon-32x32.png)](https://www.finbuckle.com/)
 
@@ -213,20 +214,31 @@ The **Application Interface Layer** is for sharing requests and validators with 
           }
       }
 
-## List of Notifications exposed by the library
+## Commands/Notifications Table exposed by the library
 
+| Command |Notification  |
+|--|--|
+| CreateClaimCommand | ClaimCreatedEvent |
+| DeleteClaimCommand | ClaimDeletedEvent |
+| AddClaimToUserCommand | ClaimAddedToUserEvent|
+| RemoveClaimFromUserCommand | ClaimRemovedFromUserEvent|
+| AddUserCommand | UserAddedEvent |
+| ConfirmUserEmailCommand | UserEmailConfirmedEvent |
+| DeleteUserCommand | UserDeletedEvent |
+| LoginCommand | UserLoggedInEvent |
+| RegisterCommand | TenantRegisteredEvent |
+| ResetPasswordCommand | PasswordResetCommand|
+| TryLoginCommand | N/A|
+| UpdatePasswordCommand | PasswordUpdatedEvent|
+| UpdateUserDetailsCommand | UserDetailsUpdatedEvent|
 
-- ClaimCreatedEvent
-- ClaimDeletedEvent
-- ClaimAddedToUserEvent
-- ClaimRemovedFromUserEvent
-- UserAddedEvent
-- UserDeletedEvent
-- UserLoggedInEvent
-- PasswordUpdatedEvent
-- PasswordResetEvent
-- UserDetailsUpdatedEvent
-- TenantRegisteredEvent
+## List of queries exposed by the library
+
+ - GetUserByEmailQuery
+ - GetUserByIdQuery
+ - ListUsersQuery
+ - ListUserClaimsCommand
+ - ListClaimsQuery
 
 ## License
 
