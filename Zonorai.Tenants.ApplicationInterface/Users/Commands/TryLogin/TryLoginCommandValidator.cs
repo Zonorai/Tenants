@@ -8,6 +8,6 @@ public class TryLoginCommandValidator : AbstractValidator<TryLoginCommand>
     public TryLoginCommandValidator()
     {
         RuleFor(x => x.Email).EmailAddress();
-        RuleFor(x=> x.Password).Password();
+        RuleFor(x => x.Password).Password();
     }
 }

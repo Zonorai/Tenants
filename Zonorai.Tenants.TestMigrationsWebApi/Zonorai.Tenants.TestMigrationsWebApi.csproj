@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Zonorai.Tenants\Zonorai.Tenants.csproj" />
+      <PackageReference Include="Zonorai.Tenants" Version="1.0.6" />
     </ItemGroup>
 
 </Project>

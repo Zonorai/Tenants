@@ -16,13 +16,11 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavio
         _logger = logger;
     }
 
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
+        RequestHandlerDelegate<TResponse> next)
     {
         //Ignore if this is a result response since the result behaviour will take care of it
-        if (typeof(Result).IsAssignableFrom(typeof(TResponse)))
-        {
-            return await next();
-        }
+        if (typeof(Result).IsAssignableFrom(typeof(TResponse))) return await next();
         try
         {
             return await next();
@@ -31,7 +29,8 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavio
         {
             var requestName = typeof(TRequest).Name;
 
-            _logger.LogError(ex, "api Request: Unhandled Exception for Request {Name} {@Request}", requestName, request);
+            _logger.LogError(ex, "api Request: Unhandled Exception for Request {Name} {@Request}", requestName,
+                request);
 
             throw;
         }

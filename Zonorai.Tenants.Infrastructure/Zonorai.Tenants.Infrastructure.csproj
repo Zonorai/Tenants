@@ -3,12 +3,12 @@
     <PropertyGroup>
         <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
         <LangVersion>latest</LangVersion>
-        <Version>1.0.5</Version>
+        <Version>1.0.6</Version>
         <Authors>Zonorai</Authors>
         <PackageId>Zonorai.Tenants.Infrastructure</PackageId>
-        <Description>Application layer for Zonorai.Tenants</Description>
+        <Description>Infrastructur layer for Zonorai.Tenants</Description>
         <Copyright>Copyright Zonorai</Copyright>
-        <PackageTags>tenants;users;claims;authentication</PackageTags>
+        <PackageTags>tenants;users;claims;authentication;multitenancy</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Company>Zonorai</Company>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -30,11 +30,8 @@
     <ItemGroup>
         <PackageReference Include="Finbuckle.MultiTenant.AspNetCore" Version="6.5.0" />
         <PackageReference Include="Finbuckle.MultiTenant.EntityFrameworkCore" Version="6.5.0" />
-        
-    </ItemGroup>
+        <PackageReference Include="Zonorai.Tenants.Application" Version="1.0.6" />
 
-    <ItemGroup>
-      <ProjectReference Include="..\Zonorai.Tenants.Application\Zonorai.Tenants.Application.csproj" />
     </ItemGroup>
 
 </Project>

@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Zonorai.Tenants.Application.Users.Commands.ResetPassword;
 
-public record PasswordResetEvent(string UserId,DateTime DateReset) : INotification;
+public record PasswordResetEvent(string UserId, DateTime DateReset) : INotification;

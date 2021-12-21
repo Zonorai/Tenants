@@ -7,8 +7,8 @@ public class UpdatePasswordCommandValidator : AbstractValidator<UpdatePasswordCo
 {
     public UpdatePasswordCommandValidator()
     {
-        RuleFor(x=> x.CurrentPassword).Password();
-        RuleFor(x=> x.NewPassword).Password();
+        RuleFor(x => x.CurrentPassword).Password();
+        RuleFor(x => x.NewPassword).Password();
         RuleFor(x => x.UserId).NotEmpty().NotNull();
     }
 }

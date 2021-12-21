@@ -13,9 +13,9 @@ namespace Zonorai.Tenants.Application.Users.Commands.UpdateUserDetails;
 
 public class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateUserDetailsCommand, Result>
 {
-    private readonly ITenantInfo _tenantInfo;
-    private readonly ITenantDbContext _tenantDbContext;
     private readonly IEventStore _eventStore;
+    private readonly ITenantDbContext _tenantDbContext;
+    private readonly ITenantInfo _tenantInfo;
 
     public UpdateUserDetailsCommandHandler(ITenantDbContext tenantDbContext, ITenantInfo tenantInfo,
         IEventStore eventStore)
@@ -28,41 +28,26 @@ public class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateUserDetails
     public async Task<Result> Handle(UpdateUserDetailsCommand request, CancellationToken cancellationToken)
     {
         var user = await _tenantDbContext.Users.Include(x => x.Tenants)
-            .SingleOrDefaultAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
+            .SingleOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         if (user.Tenants.Any(x => x.Id == _tenantInfo.Id) == false)
-        {
             return Result.Fail("You don't have permissions to edit this user");
-        }
 
         if (string.IsNullOrEmpty(request.PhoneNumber) == false)
-        {
             if (user.PhoneNumber != request.PhoneNumber)
-            {
                 user.SetPhoneNumber(request.PhoneNumber);
-            }
-        }
 
-        if (user.Email != request.Email)
-        {
-            user.SetEmail(request.Email);
-        }
+        if (user.Email != request.Email) user.SetEmail(request.Email);
 
-        if (user.Name != request.Name)
-        {
-            user.SetName(request.Name);
-        }
+        if (user.Name != request.Name) user.SetName(request.Name);
 
-        if (user.Surname != request.Surname)
-        {
-            user.SetSurname(request.Surname);
-        }
+        if (user.Surname != request.Surname) user.SetSurname(request.Surname);
 
         _tenantDbContext.Users.Update(user);
-        
+
         await _eventStore.AddEvent(new UserDetailsUpdatedEvent(user.Id, user.Email, user.Surname, user.PhoneNumber,
             user.PhoneNumber, DateTime.Now));
-        
+
         await _tenantDbContext.SaveChangesAsync(cancellationToken);
         return Result.Ok();
     }

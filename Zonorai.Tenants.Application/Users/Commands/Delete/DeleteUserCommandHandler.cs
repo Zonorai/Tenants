@@ -7,7 +7,7 @@ using Zonorai.Tenants.ApplicationInterface.Users.Commands.Delete;
 
 namespace Zonorai.Tenants.Application.Users.Commands.Delete;
 
-public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand,Result>
+public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Result>
 {
     private readonly IUserService _userService;
 

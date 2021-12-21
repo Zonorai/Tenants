@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Finbuckle.MultiTenant;
@@ -10,46 +9,39 @@ using Microsoft.EntityFrameworkCore;
 using Zonorai.Tenants.Application.Common;
 using Zonorai.Tenants.ApplicationInterface.UserClaims.Queries;
 using Zonorai.Tenants.ApplicationInterface.UserClaims.Queries.ListUserClaims;
-using Zonorai.Tenants.Domain.UserClaims;
 
-namespace Zonorai.Tenants.Application.UserClaims.Queries.ListUserClaims
+namespace Zonorai.Tenants.Application.UserClaims.Queries.ListUserClaims;
+
+public class ListUserClaimsCommandHandler : IRequestHandler<ListUserClaimsCommand, List<UserClaimDto>>
 {
+    private readonly ITenantDbContext _tenantDbContext;
+    private readonly ITenantInfo _tenantInfo;
 
-    public class ListUserClaimsCommandHandler : IRequestHandler<ListUserClaimsCommand, List<UserClaimDto>>
+    public ListUserClaimsCommandHandler(ITenantInfo tenantInfo, ITenantDbContext tenantDbContext)
     {
-        private readonly ITenantDbContext _tenantDbContext;
-        private readonly ITenantInfo _tenantInfo;
+        _tenantInfo = tenantInfo;
+        _tenantDbContext = tenantDbContext;
+    }
 
-        public ListUserClaimsCommandHandler(ITenantInfo tenantInfo, ITenantDbContext tenantDbContext)
-        {
-            _tenantInfo = tenantInfo;
-            _tenantDbContext = tenantDbContext;
-        }
+    public async Task<List<UserClaimDto>> Handle(ListUserClaimsCommand request, CancellationToken cancellationToken)
+    {
+        var user = await _tenantDbContext.Users.Include(x => x.Tenants).Include(x => x.Claims)
+            .ThenInclude(x => x.Claim)
+            .SingleOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
-        public async Task<List<UserClaimDto>> Handle(ListUserClaimsCommand request, CancellationToken cancellationToken)
-        {
-            var user = await _tenantDbContext.Users.Include(x => x.Tenants).Include(x => x.Claims)
-                .ThenInclude(x => x.Claim)
-                .SingleOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
+        if (user.Tenants.Any(x => x.Id == _tenantInfo.Id) == false)
+            throw new Exception("You do not have permissions to invoke any methods on this user");
 
-            if (user.Tenants.Any(x => x.Id == _tenantInfo.Id) == false)
+        var userClaims = new List<UserClaimDto>();
+        foreach (var claim in user.Claims)
+            userClaims.Add(new UserClaimDto
             {
-                throw new Exception("You do not have permissions to invoke any methods on this user");
-            }
+                UserId = claim.UserId,
+                ClaimId = claim.ClaimId,
+                Type = claim.Claim.Type,
+                Value = claim.Claim.Value
+            });
 
-            List<UserClaimDto> userClaims = new List<UserClaimDto>();
-            foreach (var claim in user.Claims)
-            {
-                userClaims.Add(new UserClaimDto()
-                {
-                    UserId = claim.UserId,
-                    ClaimId = claim.ClaimId,
-                    Type = claim.Claim.Type,
-                    Value = claim.Claim.Value
-                });
-            }
-
-            return userClaims;
-        }
+        return userClaims;
     }
 }

@@ -1,10 +1,9 @@
 using MediatR;
 
-namespace Zonorai.Tenants.ApplicationInterface.Users.Commands.TryLogin
+namespace Zonorai.Tenants.ApplicationInterface.Users.Commands.TryLogin;
+
+public class TryLoginCommand : IRequest<LoginResult>
 {
-    public class TryLoginCommand : IRequest<LoginResult>
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
+    public string Email { get; set; }
+    public string Password { get; set; }
 }

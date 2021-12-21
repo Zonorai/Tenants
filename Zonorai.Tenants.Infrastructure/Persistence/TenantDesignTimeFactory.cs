@@ -8,7 +8,7 @@ public class TenantDesignTimeFactory : IDesignTimeDbContextFactory<TenantDbConte
     public TenantDbContext CreateDbContext(string[] args)
     {
         var builder = new DbContextOptionsBuilder<TenantDbContext>();
-        builder.UseSqlServer(x => x.MigrationsAssembly(this.GetType().Assembly.FullName));
+        builder.UseSqlServer(x => x.MigrationsAssembly(GetType().Assembly.FullName));
         var options = builder.Options;
         return TenantDbContext.Create(options);
     }

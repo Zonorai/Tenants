@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentResults;
@@ -33,7 +32,7 @@ public class ResultValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<
             if (failures.Any())
             {
                 var messages = failures.Select(x => x.ErrorMessage);
-                Result result = Result.Fail(string.Join(',', messages));
+                var result = Result.Fail(string.Join(',', messages));
                 return result as TResponse;
             }
         }

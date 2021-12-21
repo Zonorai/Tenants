@@ -1,11 +1,10 @@
 using FluentResults;
 using MediatR;
 
-namespace Zonorai.Tenants.ApplicationInterface.UserClaims.Commands.Delete
+namespace Zonorai.Tenants.ApplicationInterface.UserClaims.Commands.Delete;
+
+public class RemoveClaimFromUserCommand : IRequest<Result>
 {
-    public class RemoveClaimFromUserCommand : IRequest<Result>
-    {
-        public string ClaimId { get; set; }
-        public string UserId { get; set; }
-    }
+    public string ClaimId { get; set; }
+    public string UserId { get; set; }
 }

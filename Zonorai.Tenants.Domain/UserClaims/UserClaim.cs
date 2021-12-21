@@ -19,14 +19,14 @@ namespace Zonorai.Tenants.Domain.UserClaims
 
         private UserClaim()
         {
-            
         }
-        public string ClaimId { get; private set; }
+
+        public string ClaimId { get; }
 
         public SecurityClaim Claim { get; private set; }
-        public string UserId { get; private set; }
+        public string UserId { get; }
 
         public User User { get; private set; }
-        public string TenantId { get; private set; }
+        public string TenantId { get; }
     }
 }

@@ -13,8 +13,8 @@ namespace Zonorai.Tenants.Application.Users.Queries.GetUserByEmail;
 
 public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, UserDto>
 {
-    private readonly ITenantInfo _tenantInfo;
     private readonly ITenantDbContext _tenantDbContext;
+    private readonly ITenantInfo _tenantInfo;
 
     public GetUserByEmailQueryHandler(ITenantInfo tenantInfo, ITenantDbContext tenantDbContext)
     {
@@ -25,11 +25,10 @@ public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, U
     public async Task<UserDto> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
     {
         var user = await _tenantDbContext.Users.Include(x => x.Tenants)
-            .SingleOrDefaultAsync(x => x.Email == request.Email, cancellationToken: cancellationToken);
-        
+            .SingleOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
+
         if (user.Tenants.Any(x => x.Id == _tenantInfo.Id))
-        {
-            return new UserDto()
+            return new UserDto
             {
                 Email = user.Email,
                 Id = user.Id,
@@ -37,7 +36,6 @@ public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, U
                 Surname = user.Surname,
                 EmailConfirmed = false
             };
-        }
 
         throw new Exception("You do not have permissions to view this user");
     }

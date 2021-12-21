@@ -6,6 +6,6 @@ public class ConfirmUserEmailValidator : AbstractValidator<ConfirmUserEmailComma
 {
     public ConfirmUserEmailValidator()
     {
-        RuleFor(x=> x.UserId).NotNull().NotEmpty();
+        RuleFor(x => x.UserId).NotNull().NotEmpty();
     }
 }

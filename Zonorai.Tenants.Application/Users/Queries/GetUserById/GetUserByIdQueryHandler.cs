@@ -11,10 +11,10 @@ using Zonorai.Tenants.ApplicationInterface.Users.Queries.GetUserById;
 
 namespace Zonorai.Tenants.Application.Users.Queries.GetUserById;
 
-public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery,UserDto>
+public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
 {
-    private readonly ITenantInfo _tenantInfo;
     private readonly ITenantDbContext _tenantDbContext;
+    private readonly ITenantInfo _tenantInfo;
 
     public GetUserByIdQueryHandler(ITenantInfo tenantInfo, ITenantDbContext tenantDbContext)
     {
@@ -25,11 +25,10 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery,UserDto>
     public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _tenantDbContext.Users.Include(x => x.Tenants)
-            .SingleOrDefaultAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
-        
+            .SingleOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+
         if (user.Tenants.Any(x => x.Id == _tenantInfo.Id))
-        {
-            return new UserDto()
+            return new UserDto
             {
                 Email = user.Email,
                 Id = user.Id,
@@ -37,7 +36,6 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery,UserDto>
                 Surname = user.Surname,
                 EmailConfirmed = false
             };
-        }
 
         throw new Exception("You do not have permissions to view this user");
     }

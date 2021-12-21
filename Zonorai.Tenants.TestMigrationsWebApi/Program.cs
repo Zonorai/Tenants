@@ -1,46 +1,24 @@
-using System.Runtime.CompilerServices;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Zonorai.Tenants;
-using Zonorai.Tenants.Application;
 using Zonorai.Tenants.Application.Claims.Commands.Create;
 using Zonorai.Tenants.Application.Users.Commands.Register;
-using Zonorai.Tenants.ApplicationInterface;
 using Zonorai.Tenants.ApplicationInterface.Claims.Commands.Create;
 using Zonorai.Tenants.ApplicationInterface.Users.Commands.Register;
-using Zonorai.Tenants.Infrastructure;
 using Zonorai.Tenants.Infrastructure.Configuration;
 using Zonorai.Tenants.Infrastructure.Persistence;
 using Zonorai.Tenants.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMediatR(typeof(Program).Assembly);
-builder.Services.AddZonoraiMultiTenancy(builder.Configuration,
-    tenantApplicationConfiguration: (x) =>
-    {
-        x.RequireConfirmedEmailForLogin = true;
-    });
-builder.Services.AddZonoraiMultiTenancy(builder.Configuration,
-    tenantInfrastructureConfiguration: (x) =>
-    {
-        x.JWTSecret = "SomeBase64String";
-        x.DbConnection = "SomeSqlConnection";
-        x.JwtExpirationInHours = 48;
-        x.ValidAudience = "www.somewhere.com";
-        x.ValidIssuer = "www.someissues.com";
-    });
-builder.Services.AddZonoraiMultiTenancy((configuration) =>
-    {
-        configuration.RequireConfirmedEmailForLogin = true;
-    },
-    tenantInfrastructureConfiguration: (x) =>
-    {
-        x.JWTSecret = "SomeBase64String";
-        x.DbConnection = "SomeSqlConnection";
-        x.JwtExpirationInHours = 48;
-        x.ValidAudience = "www.somewhere.com";
-        x.ValidIssuer = "www.someissues.com";
-    });
+builder.Services.AddZonoraiMultiTenancy(builder.Configuration);
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("CanPurge2", policy => policy.RequireRole("Owner2"));
@@ -55,16 +33,16 @@ app.UseMultiTenant();
 app.UseAuthentication();
 app.UseAuthentication();
 var scope = app.Services.CreateScope();
-var context = scope.ServiceProvider.GetRequiredService<CustomDbContext>();
+var context = scope.ServiceProvider.GetRequiredService<TenantDbContext>();
 await context.Database.MigrateAsync();
 var sender = scope.ServiceProvider.GetRequiredService<IMediator>();
 try
 {
-    var result = await sender.Send(new RegisterCommand()
+    var result = await sender.Send(new RegisterCommand
     {
-        Email = "zonorai@zonorai.com",
+        Email = "zonorai@zonorai22.com",
         Password = "SirZurich1234#*",
-        Company = "Testing",
+        Company = "Testing22",
         Name = "John",
         Surname = "Doe",
         Website = "www.gooogle.com"
@@ -75,7 +53,7 @@ try
         Type = "Hello",
         Value = "Hello"
     });
-
+    var y = claimResult;
 }
 catch (Exception e)
 {

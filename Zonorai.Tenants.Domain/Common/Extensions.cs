@@ -7,10 +7,7 @@ namespace Zonorai.Tenants.Domain.Common
     {
         public static void ThrowIfFailed(this ValidationResult result)
         {
-            if (result.IsValid == false)
-            {
-                throw new ValidationException(result.Errors);
-            }
+            if (result.IsValid == false) throw new ValidationException(result.Errors);
         }
 
         public static IRuleBuilder<T, string> Password<T>(this IRuleBuilder<T, string> ruleBuilder)

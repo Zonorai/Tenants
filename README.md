@@ -20,10 +20,10 @@ The **Application Interface Layer** is for sharing requests and validators with 
 - Email Confirmation
 - Add to Tenant
 - Remove from Tenant
-- Assign/Unassign Claims (Tenant as Context)
+- Assign/Unassign Claims (Is MultiTenant)
 
 ## Claim Features
-- Add/Remove (Tenant as Context)
+- Add/Remove (Is MultiTenant)
 
 ## General Features
 - Setup for JWT Authentication/Authorization provided
@@ -103,20 +103,20 @@ The **Application Interface Layer** is for sharing requests and validators with 
     [ApiController]
     public class UserController : ControllerBase
     { 
-            private readonly ISender _sender;
+        private readonly ISender _sender;
             
-            public UserController(ISender sender)
-            {
-	            _sender = sender
-            }
+        public UserController(ISender sender)
+        {
+	        _sender = sender
+        }
             
-            [HttpPost]
-            [Route("[action]")]
-            public async Task<RegisterResult> Register([FromBody] RegisterCommand command)
-            {
-                var result = await _sender.Send(command);
-                return result;
-            }
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<RegisterResult> Register([FromBody] RegisterCommand command)
+        {
+        var result = await _sender.Send(command);
+        return result;
+        }
     }
 
 
@@ -233,4 +233,5 @@ The **Application Interface Layer** is for sharing requests and validators with 
 MIT
 
 **Hope this saves you some time and effort!**
-**Enjoy**
+***
+**With <3 Zonorai**

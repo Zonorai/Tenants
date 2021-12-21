@@ -10,7 +10,7 @@
         <PackageId>Zonorai.Tenants.ApplicationInterface</PackageId>
         <Description>Application Interface layer for Zonorai.Tenants</Description>
         <Copyright>Copyright Zonorai</Copyright>
-        <PackageTags>tenants;users;claims;authentication</PackageTags>
+        <PackageTags>tenants;users;claims;authentication;multitenancy</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Company>Zonorai</Company>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -19,11 +19,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FluentResults" Version="3.1.0" />
-      <PackageReference Include="FluentValidation" Version="10.3.6" />
-      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.6" />
-      <PackageReference Include="MediatR" Version="9.0.0" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+        <PackageReference Include="FluentResults" Version="3.1.0"/>
+        <PackageReference Include="FluentValidation" Version="10.3.6"/>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.6"/>
+        <PackageReference Include="MediatR" Version="9.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0"/>
     </ItemGroup>
 
 </Project>

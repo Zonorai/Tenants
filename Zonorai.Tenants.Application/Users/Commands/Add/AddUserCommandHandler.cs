@@ -8,7 +8,7 @@ using Zonorai.Tenants.Domain.Users;
 
 namespace Zonorai.Tenants.Application.Users.Commands.Add;
 
-public class AddUserCommandHandler : IRequestHandler<AddUserCommand,Result>
+public class AddUserCommandHandler : IRequestHandler<AddUserCommand, Result>
 {
     private readonly IUserService _userService;
 
@@ -19,7 +19,7 @@ public class AddUserCommandHandler : IRequestHandler<AddUserCommand,Result>
 
     public async Task<Result> Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
-        CreateUser createUser = new CreateUser(request.Email, request.Name, request.Surname, request.Password,
+        var createUser = new CreateUser(request.Email, request.Name, request.Surname, request.Password,
             request.PhoneNumber);
         return await _userService.AddUser(createUser);
     }

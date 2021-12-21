@@ -23,7 +23,6 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
     {
         //Ignore if this is a result response since the result specific behaviour will take care of it
         if (typeof(Result).IsAssignableFrom(typeof(TResponse)) == false)
-        {
             if (_validators.Any())
             {
                 var context = new ValidationContext<TRequest>(request);
@@ -40,7 +39,6 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
                 if (failures.Any())
                     throw new ValidationException(failures);
             }
-        }
 
         return await next();
     }

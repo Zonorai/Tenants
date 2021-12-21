@@ -1,4 +1,3 @@
-using System.Data;
 using FluentValidation;
 
 namespace Zonorai.Tenants.ApplicationInterface.Users.Commands.UpdateUserDetails;

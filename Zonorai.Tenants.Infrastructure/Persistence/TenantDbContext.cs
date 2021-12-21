@@ -11,61 +11,56 @@ using Zonorai.Tenants.Domain.UserClaims;
 using Zonorai.Tenants.Domain.Users;
 using Zonorai.Tenants.Infrastructure.Services;
 
-namespace Zonorai.Tenants.Infrastructure.Persistence
+namespace Zonorai.Tenants.Infrastructure.Persistence;
+
+public class TenantDbContext : EFCoreStoreDbContext<TenantInformation>, ITenantDbContext
 {
-    public class TenantDbContext : EFCoreStoreDbContext<TenantInformation>, ITenantDbContext
+    private readonly IEventStore _eventStore;
+    private readonly IMediator _mediator;
+
+    public TenantDbContext(DbContextOptions<TenantDbContext> options, IMediator mediator, IEventStore eventStore) :
+        base(options)
     {
-        private readonly IMediator _mediator;
-        private readonly IEventStore _eventStore;
+        _mediator = mediator;
+        _eventStore = eventStore;
+    }
 
-        public TenantDbContext(DbContextOptions<TenantDbContext> options, IMediator mediator, IEventStore eventStore) :
-            base(options)
+    private TenantDbContext(DbContextOptions<TenantDbContext> options) : base(options)
+    {
+    }
+
+    public DbSet<User> Users { get; set; }
+    public DbSet<SecurityClaim> Claims { get; set; }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var casted = (EventStore) _eventStore;
+        int result;
+        try
         {
-            _mediator = mediator;
-            _eventStore = eventStore;
+            result = await base.SaveChangesAsync(cancellationToken);
         }
-
-        private TenantDbContext(DbContextOptions<TenantDbContext> options) : base(options)
+        catch (Exception e)
         {
-        }
-
-        internal static TenantDbContext Create(DbContextOptions<TenantDbContext> options)
-        {
-            return new TenantDbContext(options);
-        }
-
-        public DbSet<User> Users { get; set; }
-        public DbSet<SecurityClaim> Claims { get; set; }
-        public DbSet<UserClaim> UserClaims { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(TenantDbContext).Assembly);
-
-            base.OnModelCreating(modelBuilder);
-        }
-
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            var casted = (EventStore) _eventStore;
-            int result;
-            try
-            {
-                result = await base.SaveChangesAsync(cancellationToken);
-            }
-            catch (Exception e)
-            {
-                casted.Clear();
-                throw e;
-            }
-
-            foreach (var @event in _eventStore.Events)
-            {
-                await _mediator.Publish(@event, cancellationToken);
-            }
-
             casted.Clear();
-            return result;
+            throw e;
         }
+
+        foreach (var @event in _eventStore.Events) await _mediator.Publish(@event, cancellationToken);
+
+        casted.Clear();
+        return result;
+    }
+
+    internal static TenantDbContext Create(DbContextOptions<TenantDbContext> options)
+    {
+        return new TenantDbContext(options);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(TenantDbContext).Assembly);
+
+        base.OnModelCreating(modelBuilder);
     }
 }

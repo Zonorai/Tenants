@@ -6,6 +6,6 @@ namespace Zonorai.Tenants.Application.Common;
 
 public interface IEventStore
 {
-    public Task AddEvent<T>(T @event) where T : INotification;
     public IReadOnlyCollection<INotification> Events { get; }
+    public Task AddEvent<T>(T @event) where T : INotification;
 }

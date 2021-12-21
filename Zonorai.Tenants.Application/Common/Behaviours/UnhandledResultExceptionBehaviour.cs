@@ -7,7 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Zonorai.Tenants.Application.Common.Behaviours;
 
-public class UnhandledResultExceptionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TResponse : Result,new()
+public class UnhandledResultExceptionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TResponse : Result, new()
 {
     private readonly ILogger<TRequest> _logger;
 
@@ -16,7 +17,8 @@ public class UnhandledResultExceptionBehaviour<TRequest, TResponse> : IPipelineB
         _logger = logger;
     }
 
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
+        RequestHandlerDelegate<TResponse> next)
     {
         try
         {
@@ -26,7 +28,8 @@ public class UnhandledResultExceptionBehaviour<TRequest, TResponse> : IPipelineB
         {
             var requestName = typeof(TRequest).Name;
 
-            _logger.LogError(ex, "api Request: Unhandled Exception for Request {Name} {@Request}", requestName, request);
+            _logger.LogError(ex, "api Request: Unhandled Exception for Request {Name} {@Request}", requestName,
+                request);
 
             return Result.Fail(ex.Message) as TResponse;
         }

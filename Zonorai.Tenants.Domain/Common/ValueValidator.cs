@@ -7,8 +7,8 @@ using FluentValidation;
 namespace Zonorai.Tenants.Domain.Common
 {
     /// <summary>
-    /// A glue class to make it easy to define validation rules for single values using FluentValidation
-    /// You can reuse this class for all your fields, like for the credit card rules above.
+    ///     A glue class to make it easy to define validation rules for single values using FluentValidation
+    ///     You can reuse this class for all your fields, like for the credit card rules above.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     internal class FluentValueValidator<T> : AbstractValidator<T>
@@ -18,12 +18,15 @@ namespace Zonorai.Tenants.Domain.Common
             rule(RuleFor(x => x));
         }
 
+        public Func<T, IEnumerable<string>> Validation => ValidateValue;
+
         internal static void Validate(T value, Action<IRuleBuilderInitial<T, T>> rules)
         {
             var validator = new FluentValueValidator<T>(rules);
             var isValid = validator.Validate(value);
             isValid.ThrowIfFailed();
         }
+
         private IEnumerable<string> ValidateValue(T arg)
         {
             var result = Validate(arg);
@@ -31,7 +34,5 @@ namespace Zonorai.Tenants.Domain.Common
                 return new string[0];
             return result.Errors.Select(e => e.ErrorMessage);
         }
-
-        public Func<T, IEnumerable<string>> Validation => ValidateValue;
     }
 }

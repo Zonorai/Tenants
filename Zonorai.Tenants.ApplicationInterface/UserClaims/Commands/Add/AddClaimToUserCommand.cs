@@ -1,11 +1,10 @@
 using FluentResults;
 using MediatR;
 
-namespace Zonorai.Tenants.ApplicationInterface.UserClaims.Commands.Add
+namespace Zonorai.Tenants.ApplicationInterface.UserClaims.Commands.Add;
+
+public class AddClaimToUserCommand : IRequest<Result>
 {
-    public class AddClaimToUserCommand : IRequest<Result>
-    {
-        public string ClaimId { get; set; }
-        public string UserId { get; set; }
-    }
+    public string ClaimId { get; set; }
+    public string UserId { get; set; }
 }

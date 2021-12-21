@@ -13,8 +13,8 @@ namespace Zonorai.Tenants.Application.Users.Queries.ListUsers;
 
 public class ListUsersQueryHandler : IRequestHandler<ListUsersQuery, List<UserDto>>
 {
-    private readonly ITenantInfo _tenantInfo;
     private readonly ITenantDbContext _tenantDbContext;
+    private readonly ITenantInfo _tenantInfo;
 
     public ListUsersQueryHandler(ITenantInfo tenantInfo, ITenantDbContext tenantDbContext)
     {
@@ -25,11 +25,10 @@ public class ListUsersQueryHandler : IRequestHandler<ListUsersQuery, List<UserDt
     public async Task<List<UserDto>> Handle(ListUsersQuery request, CancellationToken cancellationToken)
     {
         var users = await _tenantDbContext.Users.Where(x => x.Tenants.Any(x => x.Id == _tenantInfo.Id))
-            .ToListAsync(cancellationToken: cancellationToken);
-        List<UserDto> userDtos = new List<UserDto>();
+            .ToListAsync(cancellationToken);
+        var userDtos = new List<UserDto>();
         foreach (var user in users)
-        {
-            userDtos.Add(new UserDto()
+            userDtos.Add(new UserDto
             {
                 Email = user.Email,
                 Id = user.Id,
@@ -37,7 +36,6 @@ public class ListUsersQueryHandler : IRequestHandler<ListUsersQuery, List<UserDt
                 Surname = user.Surname,
                 EmailConfirmed = false
             });
-        }
 
         return userDtos;
     }
