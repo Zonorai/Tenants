@@ -4,7 +4,7 @@
 This repository integrates with Finbuckle.MultiTenant using a Claim-Based Strategy and provides common use-cases that go along with multi-tenancy.
 
 ## Implementation Details
-Functions are exposed as **Mediatr Command/Query Endpoints** with appropriate **notifications** for each command, making it easy to **extend** this library.
+Functions are exposed as **Mediatr Command/Query Endpoints** with **Notifications** for each command, making it easy to **extend** this library.
 
 Persistence is driven by **EF CORE**.
 
@@ -95,7 +95,7 @@ The **Application Interface Layer** is for sharing requests and validators with 
 
 `app.UseAuthentication();`
 
-`app.UseAuthentication();`
+`app.UseAuthorization();`
 
 ## Examples
 **Registering a new tenant from a controller endpoint**
@@ -114,8 +114,8 @@ The **Application Interface Layer** is for sharing requests and validators with 
         [Route("[action]")]
         public async Task<RegisterResult> Register([FromBody] RegisterCommand command)
         {
-        var result = await _sender.Send(command);
-        return result;
+          var result = await _sender.Send(command);
+          return result;
         }
     }
 
@@ -178,7 +178,7 @@ The **Application Interface Layer** is for sharing requests and validators with 
     var app = builder.Build();  
     app.UseMultiTenant();  
     app.UseAuthentication();  
-    app.UseAuthentication();  
+    app.UseAuthorization();  
     var scope = app.Services.CreateScope();  
     var context = scope.ServiceProvider.GetRequiredService<TenantDbContext>();  
     await context.Database.MigrateAsync();
@@ -219,7 +219,7 @@ The **Application Interface Layer** is for sharing requests and validators with 
 - ClaimCreatedEvent
 - ClaimDeletedEvent
 - ClaimAddedToUserEvent
-- ClaimRemovedFromuserEvent
+- ClaimRemovedFromUserEvent
 - UserAddedEvent
 - UserDeletedEvent
 - UserLoggedInEvent
