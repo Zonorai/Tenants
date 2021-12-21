@@ -227,7 +227,7 @@ The **Application Interface Layer** is for sharing requests and validators with 
 | DeleteUserCommand | UserDeletedEvent |
 | LoginCommand | UserLoggedInEvent |
 | RegisterCommand | TenantRegisteredEvent |
-| ResetPasswordCommand | PasswordResetCommand|
+| ResetPasswordCommand | PasswordResetEvent|
 | TryLoginCommand | N/A|
 | UpdatePasswordCommand | PasswordUpdatedEvent|
 | UpdateUserDetailsCommand | UserDetailsUpdatedEvent|
