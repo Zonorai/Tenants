@@ -4,6 +4,8 @@
 
 This repository integrates with Finbuckle.MultiTenant using a Claim-Based Strategy and provides common use-cases that go along with multi-tenancy.
 
+`dotnet add package Zonorai.Tenants --version 1.0.6`
+
 ## Implementation Details
 Functions are exposed as **Mediatr Command/Query Endpoints** with **Notifications** for each command, making it easy to **extend** this library.
 
