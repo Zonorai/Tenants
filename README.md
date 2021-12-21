@@ -186,9 +186,9 @@ The **Application Interface Layer** is for sharing requests and validators with 
 **All commands have a notification that gets published once the changes are persisted**
 *This allows you to react to every action that occurs in this library effectively allowing all the extension you need.*
 
-*The publishing occurs in the DbContext SaveChanges method and if you inherit from UserMultiTenantDbContext you can also publish all your events post persistence.*
+*The publishing occurs in the DbContext SaveChangesAsync method and if you inherit from UserMultiTenantDbContext you can also publish all your events post persistence.*
 
-*To achieve this make use of the IEventStore interface and add your INotification object prior to calling SaveChanges*
+*To achieve this make use of the IEventStore interface and add your INotification object prior to calling SaveChangesAsync*
 
 **Example**
 
