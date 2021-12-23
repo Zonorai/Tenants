@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
         <LangVersion>latest</LangVersion>
-        <Version>1.0.6</Version>
+        <Version>1.0.7</Version>
         <Authors>Zonorai</Authors>
         <PackageId>Zonorai.Tenants.Application</PackageId>
         <Description>Application layer for Zonorai.Tenants</Description>
@@ -20,8 +20,9 @@
         <PackageReference Include="Finbuckle.MultiTenant.EntityFrameworkCore" Version="6.5.0" />
         <PackageReference Include="MediatR" Version="9.0.0" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-        <PackageReference Include="Zonorai.Tenants.ApplicationInterface" Version="1.0.6" />
-        <PackageReference Include="Zonorai.Tenants.Domain" Version="1.0.6" />
+        <PackageReference Include="Zonorai.Tenants.ApplicationInterface" Version="1.0.7" />
+        <PackageReference Include="Zonorai.Tenants.Domain" Version="1.0.7" />
     </ItemGroup>
+
 
 </Project>

@@ -34,7 +34,8 @@ public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, U
                 Id = user.Id,
                 Name = user.Name,
                 Surname = user.Surname,
-                EmailConfirmed = false
+                EmailConfirmed = user.EmailConfirmed,
+                PhoneNumber = user.PhoneNumber
             };
 
         throw new Exception("You do not have permissions to view this user");

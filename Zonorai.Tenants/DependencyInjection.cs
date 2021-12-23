@@ -13,41 +13,38 @@ namespace Zonorai.Tenants
     public static class DependencyInjection
     {
         public static IServiceCollection AddZonoraiMultiTenancy(this IServiceCollection services,
-            IConfiguration configuration, Assembly migrationsAssembly = null)
+            IConfiguration configuration)
         {
             services.AddTenantsApplication(configuration);
-            services.AddTenantsInfrastructure(configuration, migrationsAssembly);
+            services.AddTenantsInfrastructure(configuration);
             services.AddTenantsApplicationInterface();
             return services;
         }
 
         public static IServiceCollection AddZonoraiMultiTenancy(this IServiceCollection services,
-            IConfiguration configuration, Action<TenantInfrastructureConfiguration> tenantInfrastructureConfiguration,
-            Assembly migrationsAssembly = null)
+            IConfiguration configuration, Action<TenantInfrastructureConfiguration> tenantInfrastructureConfiguration)
         {
             services.AddTenantsApplication(configuration);
-            services.AddTenantsInfrastructure(tenantInfrastructureConfiguration, migrationsAssembly);
+            services.AddTenantsInfrastructure(tenantInfrastructureConfiguration);
             services.AddTenantsApplicationInterface();
             return services;
         }
 
         public static IServiceCollection AddZonoraiMultiTenancy(this IServiceCollection services,
-            IConfiguration configuration, Action<TenantApplicationConfiguration> tenantApplicationConfiguration,
-            Assembly migrationsAssembly = null)
+            IConfiguration configuration, Action<TenantApplicationConfiguration> tenantApplicationConfiguration)
         {
             services.AddTenantsApplication(tenantApplicationConfiguration);
-            services.AddTenantsInfrastructure(configuration, migrationsAssembly);
+            services.AddTenantsInfrastructure(configuration);
             services.AddTenantsApplicationInterface();
             return services;
         }
 
         public static IServiceCollection AddZonoraiMultiTenancy(this IServiceCollection services,
             Action<TenantApplicationConfiguration> tenantApplicationConfiguration,
-            Action<TenantInfrastructureConfiguration> tenantInfrastructureConfiguration,
-            Assembly migrationsAssembly = null)
+            Action<TenantInfrastructureConfiguration> tenantInfrastructureConfiguration)
         {
             services.AddTenantsApplication(tenantApplicationConfiguration);
-            services.AddTenantsInfrastructure(tenantInfrastructureConfiguration, migrationsAssembly);
+            services.AddTenantsInfrastructure(tenantInfrastructureConfiguration);
             services.AddTenantsApplicationInterface();
             return services;
         }

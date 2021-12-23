@@ -24,9 +24,12 @@ public class ListUsersQueryHandler : IRequestHandler<ListUsersQuery, List<UserDt
 
     public async Task<List<UserDto>> Handle(ListUsersQuery request, CancellationToken cancellationToken)
     {
+        var users1 = await _tenantDbContext.Users.Include(x => x.Tenants).ToListAsync();
         var users = await _tenantDbContext.Users.Where(x => x.Tenants.Any(x => x.Id == _tenantInfo.Id))
             .ToListAsync(cancellationToken);
+        
         var userDtos = new List<UserDto>();
+        
         foreach (var user in users)
             userDtos.Add(new UserDto
             {
@@ -34,7 +37,8 @@ public class ListUsersQueryHandler : IRequestHandler<ListUsersQuery, List<UserDt
                 Id = user.Id,
                 Name = user.Name,
                 Surname = user.Surname,
-                EmailConfirmed = false
+                EmailConfirmed = user.EmailConfirmed,
+                PhoneNumber = user.PhoneNumber
             });
 
         return userDtos;

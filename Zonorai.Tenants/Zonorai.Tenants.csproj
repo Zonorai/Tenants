@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
         <PackageId>Zonorai.Tenants</PackageId>
-        <Version>1.0.6</Version>
+        <Version>1.0.7</Version>
         <Authors>Zonorai</Authors>
         <PackageTags>tenants;users;claims;authentication;multi tenancy</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -16,7 +16,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Zonorai.Tenants.Infrastructure" Version="1.0.6" />
+      <PackageReference Include="Zonorai.Tenants.Infrastructure" Version="1.0.7" />
+      <PackageReference Include="Zonorai.Tenants.Migrations.PostgreSQL" Version="1.0.7" />
+      <PackageReference Include="Zonorai.Tenants.Migrations.SqlLite" Version="1.0.7" />
+      <PackageReference Include="Zonorai.Tenants.Migrations.SqlServer" Version="1.0.7" />
     </ItemGroup>
 
 </Project>

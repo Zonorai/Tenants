@@ -13,7 +13,7 @@ public class SecurityClaimConfig : IEntityTypeConfiguration<SecurityClaim>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Type).IsRequired();
         builder.Property(x=> x.Value).IsRequired();
-        builder.HasIndex(x => new {x.Value, x.Type}).IsUnique();
+        builder.HasIndex(x => new {x.Value, x.Type,x.TenantId}).IsUnique();
         builder.IsMultiTenant();
         builder.ToTable("Claims");
     }

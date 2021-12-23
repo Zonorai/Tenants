@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <Version>1.0.7</Version>
+        <Authors>Zonorai</Authors>
+        <PackageId>Zonorai.Tenants.Migrations.SqlLite</PackageId>
+        <Description>Zonorai.Tenants Migrations for SQL Lite</Description>
+        <Copyright>Copyright Zonorai</Copyright>
+        <PackageTags>tenants;users;claims;authentication;multitenancy</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Company>Zonorai</Company>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <RepositoryUrl>https://github.com/Zonorai/Tenants</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Zonorai.Tenants.Infrastructure" Version="1.0.7" />
+    </ItemGroup>
+
+</Project>

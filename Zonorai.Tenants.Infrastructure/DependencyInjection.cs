@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +17,7 @@ namespace Zonorai.Tenants.Infrastructure;
 public static class DependencyInjection
 {
     public static IServiceCollection AddTenantsInfrastructure(this IServiceCollection services,
-        IConfiguration configuration, Assembly migrationsAssembly = null)
+        IConfiguration configuration)
     {
         var section = configuration.GetSection(nameof(TenantInfrastructureConfiguration));
         if (section == null)
@@ -32,7 +32,7 @@ public static class DependencyInjection
     }
 
     public static IServiceCollection AddTenantsInfrastructure(this IServiceCollection services,
-        Action<TenantInfrastructureConfiguration> configurationAction, Assembly migrationsAssembly = null)
+        Action<TenantInfrastructureConfiguration> configurationAction)
     {
         var config = new TenantInfrastructureConfiguration();
         configurationAction.Invoke(config);
@@ -42,20 +42,55 @@ public static class DependencyInjection
     }
 
     private static IServiceCollection AddInfrastructure(this IServiceCollection services,
-        TenantInfrastructureConfiguration config, Assembly migrationsAssembly = null)
+        TenantInfrastructureConfiguration config)
     {
-        services.AddDbContext<TenantDbContext>(x =>
-            x.UseSqlServer(config.DbConnection, y =>
-            {
-                if (migrationsAssembly != null) y.MigrationsAssembly(migrationsAssembly.FullName);
+        switch (config.Provider)
+        {
+            case TenantsProvider.SqlServer:
+                services.AddDbContext<TenantDbContext>(x =>
+                    x.UseSqlServer(config.DbConnection,
+                        y => { y.MigrationsAssembly("Zonorai.Tenants.Migrations.SqlServer"); }));
+                services.AddDbContext<TenantStoreDbContext>(x =>
+                    x.UseSqlServer(config.DbConnection));
+                break;
 
-                if (migrationsAssembly == null) y.MigrationsAssembly(typeof(DependencyInjection).Assembly.FullName);
-            }));
+            case TenantsProvider.PostgreSql:
+                services.AddDbContext<TenantDbContext>(x =>
+                    x.UseNpgsql(config.DbConnection,
+                        y => { y.MigrationsAssembly("Zonorai.Tenants.Migrations.PostgreSQL"); }));
+                services.AddDbContext<TenantStoreDbContext>(x =>
+                    x.UseNpgsql(config.DbConnection));
+                break;
+
+            case TenantsProvider.Sqlite:
+                if (config.DbConnection.Contains("Filename=:memory:") ||
+                    config.DbConnection.Contains("Data Source=:memory:"))
+                {
+                    var inMemorySqlite = new SqliteConnection("Filename=:memory:");
+                    inMemorySqlite.Open();
+                    services.AddDbContext<TenantDbContext>(x =>
+                        x.UseSqlite(inMemorySqlite,
+                            y => { y.MigrationsAssembly("Zonorai.Tenants.Migrations.SqlLite"); }));
+                    services.AddDbContext<TenantStoreDbContext>(x =>
+                        x.UseSqlite(inMemorySqlite));
+                }
+                else
+                {
+                    services.AddDbContext<TenantDbContext>(x =>
+                        x.UseSqlite(config.DbConnection,
+                            y => { y.MigrationsAssembly("Zonorai.Tenants.Migrations.SqlLite"); }));
+                    services.AddDbContext<TenantStoreDbContext>(x =>
+                        x.UseSqlite(config.DbConnection));
+                }
+
+                break;
+        }
+
 
         services.AddScoped<ITenantDbContext>(x => x.GetService<TenantDbContext>());
 
         services.AddMultiTenant<TenantInformation>().WithClaimStrategy(TenantConstants.TenantIdentifier)
-            .WithEFCoreStore<TenantDbContext, TenantInformation>();
+            .WithEFCoreStore<TenantStoreDbContext, TenantInformation>();
 
         services.AddTransient<ITokenService, TokenService>();
         services.AddTransient<IUserService, UserService>();

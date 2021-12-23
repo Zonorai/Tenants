@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Finbuckle.MultiTenant;
+using Finbuckle.MultiTenant.EntityFrameworkCore;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -32,7 +34,6 @@ internal class UserService : IUserService
     private readonly ITenantInfo _tenantInfo;
     private readonly IMultiTenantStore<TenantInformation> _tenantStore;
     private readonly ITokenService _tokenService;
-
     public UserService(TenantDbContext context, IMultiTenantStore<TenantInformation> tenantStore,
         ITokenService tokenService, IOptions<TenantApplicationConfiguration> options, IEventStore eventStore,
         ITenantInfo tenantInfo)
@@ -47,7 +48,8 @@ internal class UserService : IUserService
 
     public async Task<Result> AddUser(CreateUser createUser)
     {
-        var tenant = await _context.TenantInfo.SingleOrDefaultAsync(x => x.Id == _tenantInfo.Id);
+
+        var tenant = await _context.Tenants.Include(x=> x.Users).SingleOrDefaultAsync(x=> x.Id == _tenantInfo.Id);
         if (tenant == null) return Result.Fail("Tenant Information not found");
 
         User user;
@@ -57,6 +59,13 @@ internal class UserService : IUserService
                 .SingleOrDefaultAsync(x => x.Email == createUser.Email);
             if (user.Tenants.Any(x => x.Id == _tenantInfo.Id))
                 return Result.Fail($"User with email {createUser.Email} is already a part of your organization");
+            
+            user.Tenants.Add(tenant);
+            _context.Users.Update(user);
+            
+            await _eventStore.AddEvent(new UserAddedEvent(user.Id, user.Email, user.Name, user.Surname, _tenantInfo.Id,
+                DateTime.Now));
+            await _context.SaveChangesAsync();
         }
         else
         {
@@ -64,16 +73,18 @@ internal class UserService : IUserService
         }
 
         user.Tenants.Add(tenant);
-        _context.Users.Update(user);
+        _context.Users.Add(user);
+        
         await _eventStore.AddEvent(new UserAddedEvent(user.Id, user.Email, user.Name, user.Surname, _tenantInfo.Id,
             DateTime.Now));
+        
         await _context.SaveChangesAsync();
         return Result.Ok();
     }
 
     public async Task<Result> DeleteUser(string userId)
     {
-        var tenant = await _context.TenantInfo.SingleOrDefaultAsync(x => x.Id == _tenantInfo.Id);
+        var tenant = await _context.Tenants.SingleOrDefaultAsync(x=> x.Id == _tenantInfo.Id);
         if (tenant == null) return Result.Fail("Tenant Information not found");
 
         var user = await _context.Users.Include(x => x.Tenants).SingleOrDefaultAsync(x => x.Id == userId);
@@ -95,7 +106,7 @@ internal class UserService : IUserService
     public async Task<LoginResult> Login(string email, string password)
     {
         var user = await _context.Users.Include(x => x.Tenants)
-            .Include(x => x.Claims).ThenInclude(x => x.Claim)
+            .Include(x => x.Claims).ThenInclude(x => x.Claim).IgnoreQueryFilters()
             .SingleOrDefaultAsync(x => x.Email == email);
 
         if (user == null) return new LoginResult(null, null, $"Account with Email '{email}' not found");
@@ -153,9 +164,12 @@ internal class UserService : IUserService
             Name = registerTenant.CompanyName,
             Website = registerTenant.CompanyWebsite
         };
-
         var tenantPersisted = await _tenantStore.TryAddAsync(tenant);
-
+        
+        //Voodoo only for this use case
+        _context.GetType().GetProperty(nameof(IMultiTenantDbContext.TenantInfo), 
+            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(_context,tenant);
+        
         if (tenantPersisted == false) throw new Exception("Could not register user");
 
         var createUser = new CreateUser(registerTenant.Email, registerTenant.Name,
@@ -163,22 +177,25 @@ internal class UserService : IUserService
 
         var user = new User(createUser);
 
-        var adminClaim = _context.Claims.IgnoreQueryFilters().SingleOrDefault(x => x.Type == ClaimTypes.Role && x.Value == "Admin");
-        var ownerClaim = _context.Claims.IgnoreQueryFilters().SingleOrDefault(x => x.Type == ClaimTypes.Role && x.Value == "Owner");
+        var adminClaim = _context.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Role && x.Value == "Admin");
+        var ownerClaim = _context.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Role && x.Value == "Owner");
 
         if (adminClaim == null || ownerClaim == null)
         {
-            ownerClaim = new SecurityClaim(ClaimTypes.Role, "Owner",tenant.Id);
-            adminClaim = new SecurityClaim(ClaimTypes.Role, "Admin",tenant.Id);
+            ownerClaim = new SecurityClaim(ClaimTypes.Role, "Owner");
+            adminClaim = new SecurityClaim(ClaimTypes.Role, "Admin");
             _context.Claims.Add(adminClaim);
             _context.Claims.Add(ownerClaim);
             await _context.SaveChangesAsync();
         }
-
-        user.Tenants.Add(tenant);
+        //The tenant that was added in the other context is not yet tracked in this context, so we get it first.
+        var persistedTenant = await _context.Tenants.SingleOrDefaultAsync(x => x.Id == tenant.Id);
+        
+        user.Tenants.Add(persistedTenant);
         user.Claims.Add(new UserClaim(adminClaim.Id, user.Id, tenant.Id));
         user.Claims.Add(new UserClaim(ownerClaim.Id, user.Id, tenant.Id));
         _context.Users.Add(user);
+        
         await _eventStore.AddEvent(new TenantRegisteredEvent(user.Id, user.Email, tenant.Name, user.Name,
             user.Surname, user.Tenants.First().Id, DateTime.Now));
         await _context.SaveChangesAsync();

@@ -6,15 +6,13 @@ namespace Zonorai.Tenants.Domain.Claims
 {
     public class SecurityClaim
     {
-        public SecurityClaim(string type, string value, string tenantId)
+        public SecurityClaim(string type, string value)
         {
             FluentValueValidator<string>.Validate(type, x => x.NotEmpty().NotNull());
             FluentValueValidator<string>.Validate(value, x => x.NotEmpty().NotNull());
-            FluentValueValidator<string>.Validate(tenantId, x => x.NotEmpty().NotNull());
             Id = Guid.NewGuid().ToString();
             Type = type;
             Value = value;
-            TenantId = tenantId;
         }
 
         private SecurityClaim()

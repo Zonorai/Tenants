@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,22 +28,30 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterR
     {
         var registerTenant = new RegisterTenant(request.Company, request.Website, request.Email,
             request.Name, request.Surname, request.Password, request.PhoneNumber);
-        var user = await _userService.RegisterTenant(registerTenant);
-
-        if (user == null) return new RegisterResult(null, null, "Failed To Create User",false);
-
-        if (_options.Value.RequireConfirmedEmailForLogin == false)
+        try
         {
-            var result = await _userService.Login(user.Email, request.Password, user.Tenants.First().Id);
+            var user = await _userService.RegisterTenant(registerTenant);
 
-            if (string.IsNullOrWhiteSpace(result.ErrorMessage) == false)
+            if (user == null) return new RegisterResult(null, null, "Failed To Create User", false);
+
+            if (_options.Value.RequireConfirmedEmailForLogin == false)
             {
-                return new RegisterResult(user.Id, null, result.ErrorMessage,false);
-            }
-            
-            return new RegisterResult(user.Id, result.Token, null,false);
-        }
+                var result = await _userService.Login(user.Email, request.Password, user.Tenants.First().Id);
 
-        return new RegisterResult(user.Id, null, null,true);
+                if (string.IsNullOrWhiteSpace(result.ErrorMessage) == false)
+                {
+                    return new RegisterResult(user.Id, null, result.ErrorMessage, false);
+                }
+
+                return new RegisterResult(user.Id, result.Token, null, false);
+            }
+
+            return new RegisterResult(user.Id, null, null, true);
+        }
+        catch(Exception e)
+        {
+            var z = e;
+            throw e;
+        }
     }
 }

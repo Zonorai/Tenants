@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Finbuckle.MultiTenant;
 using Finbuckle.MultiTenant.Stores;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,25 +14,24 @@ using Zonorai.Tenants.Infrastructure.Services;
 
 namespace Zonorai.Tenants.Infrastructure.Persistence;
 
-public class TenantDbContext : EFCoreStoreDbContext<TenantInformation>, ITenantDbContext
+public class TenantDbContext : MultiTenantDbContext, ITenantDbContext
 {
     private readonly IEventStore _eventStore;
     private readonly IMediator _mediator;
-
-    public TenantDbContext(DbContextOptions<TenantDbContext> options, IMediator mediator, IEventStore eventStore) :
-        base(options)
+    public TenantDbContext(DbContextOptions<TenantDbContext> options, IMediator mediator, IEventStore eventStore,ITenantInfo tenantInfo) :
+        base(tenantInfo,options)
     {
         _mediator = mediator;
         _eventStore = eventStore;
     }
 
-    private TenantDbContext(DbContextOptions<TenantDbContext> options) : base(options)
+    private TenantDbContext(DbContextOptions<TenantDbContext> options) : base(null,options)
     {
     }
 
     public DbSet<User> Users { get; set; }
     public DbSet<SecurityClaim> Claims { get; set; }
-
+    internal DbSet<TenantInformation> Tenants { get; set; }
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var casted = (EventStore) _eventStore;
@@ -60,7 +60,6 @@ public class TenantDbContext : EFCoreStoreDbContext<TenantInformation>, ITenantD
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(TenantDbContext).Assembly);
-
         base.OnModelCreating(modelBuilder);
     }
 }

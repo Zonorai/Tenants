@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
-        <Version>1.0.6</Version>
+        <Version>1.0.7</Version>
         <Authors>Zonorai</Authors>
         <PackageId>Zonorai.Tenants.Domain</PackageId>
         <Description>Domain layer for Zonorai.Tenants</Description>

@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
         <LangVersion>latest</LangVersion>
-        <Version>1.0.6</Version>
+        <Version>1.0.7</Version>
         <Authors>Zonorai</Authors>
         <PackageId>Zonorai.Tenants.Infrastructure</PackageId>
         <Description>Infrastructur layer for Zonorai.Tenants</Description>
@@ -17,12 +17,16 @@
     </PropertyGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.12" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.12" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1" />
     </ItemGroup>
@@ -30,8 +34,7 @@
     <ItemGroup>
         <PackageReference Include="Finbuckle.MultiTenant.AspNetCore" Version="6.5.0" />
         <PackageReference Include="Finbuckle.MultiTenant.EntityFrameworkCore" Version="6.5.0" />
-        <PackageReference Include="Zonorai.Tenants.Application" Version="1.0.6" />
-
+        <PackageReference Include="Zonorai.Tenants.Application" Version="1.0.7" />
     </ItemGroup>
 
 </Project>

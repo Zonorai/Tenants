@@ -13,9 +13,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zonorai.Tenants.Application
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zonorai.Tenants", "Zonorai.Tenants\Zonorai.Tenants.csproj", "{B2697D48-5245-4112-BDD2-250FACB11B22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zonorai.Tenants.TestMigrationsWebApi", "Zonorai.Tenants.TestMigrationsWebApi\Zonorai.Tenants.TestMigrationsWebApi.csproj", "{A94C9B08-6BA4-468B-843D-3959125C4AAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zonorai.Tenants.Net6WebApi", "Zonorai.Tenants.Net6WebApi\Zonorai.Tenants.Net6WebApi.csproj", "{A94C9B08-6BA4-468B-843D-3959125C4AAB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D9F47288-1BDF-4485-8688-39297B4BA486}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zonorai.Tenants.IntegrationTestsNet6", "Tests\Zonorai.Tenants.IntegrationTestsNet6\Zonorai.Tenants.IntegrationTestsNet6.csproj", "{E7EE2621-9651-4D82-96C4-5127BC38140B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zonorai.Tenants.Migrations.SqlServer", "Zonorai.Tenants.Migrations.SqlServer\Zonorai.Tenants.Migrations.SqlServer.csproj", "{B1F6FEFD-1136-412D-AC79-8353F9B46315}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zonorai.Tenants.Migrations.SqlLite", "Zonorai.Tenants.Migrations.SqlLite\Zonorai.Tenants.Migrations.SqlLite.csproj", "{5C0A69C7-BDA3-457E-BB0D-FF2AB2F85574}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zonorai.Tenants.Migrations.PostgreSQL", "Zonorai.Tenants.Migrations.PostgreSQL\Zonorai.Tenants.Migrations.PostgreSQL.csproj", "{E413EFA9-D668-4ACE-A307-AE75BE1EF174}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,5 +58,24 @@ Global
 		{A94C9B08-6BA4-468B-843D-3959125C4AAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A94C9B08-6BA4-468B-843D-3959125C4AAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A94C9B08-6BA4-468B-843D-3959125C4AAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7EE2621-9651-4D82-96C4-5127BC38140B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7EE2621-9651-4D82-96C4-5127BC38140B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7EE2621-9651-4D82-96C4-5127BC38140B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7EE2621-9651-4D82-96C4-5127BC38140B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1F6FEFD-1136-412D-AC79-8353F9B46315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1F6FEFD-1136-412D-AC79-8353F9B46315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1F6FEFD-1136-412D-AC79-8353F9B46315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1F6FEFD-1136-412D-AC79-8353F9B46315}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C0A69C7-BDA3-457E-BB0D-FF2AB2F85574}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C0A69C7-BDA3-457E-BB0D-FF2AB2F85574}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C0A69C7-BDA3-457E-BB0D-FF2AB2F85574}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C0A69C7-BDA3-457E-BB0D-FF2AB2F85574}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E413EFA9-D668-4ACE-A307-AE75BE1EF174}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E413EFA9-D668-4ACE-A307-AE75BE1EF174}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E413EFA9-D668-4ACE-A307-AE75BE1EF174}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E413EFA9-D668-4ACE-A307-AE75BE1EF174}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E7EE2621-9651-4D82-96C4-5127BC38140B} = {D9F47288-1BDF-4485-8688-39297B4BA486}
 	EndGlobalSection
 EndGlobal

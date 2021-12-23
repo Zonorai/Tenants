@@ -12,7 +12,7 @@ using Zonorai.Tenants.ApplicationInterface.UserClaims.Queries.ListUserClaims;
 
 namespace Zonorai.Tenants.Application.UserClaims.Queries.ListUserClaims;
 
-public class ListUserClaimsCommandHandler : IRequestHandler<ListUserClaimsCommand, List<UserClaimDto>>
+public class ListUserClaimsCommandHandler : IRequestHandler<ListUserClaimsQuery, List<UserClaimDto>>
 {
     private readonly ITenantDbContext _tenantDbContext;
     private readonly ITenantInfo _tenantInfo;
@@ -23,7 +23,7 @@ public class ListUserClaimsCommandHandler : IRequestHandler<ListUserClaimsComman
         _tenantDbContext = tenantDbContext;
     }
 
-    public async Task<List<UserClaimDto>> Handle(ListUserClaimsCommand request, CancellationToken cancellationToken)
+    public async Task<List<UserClaimDto>> Handle(ListUserClaimsQuery request, CancellationToken cancellationToken)
     {
         var user = await _tenantDbContext.Users.Include(x => x.Tenants).Include(x => x.Claims)
             .ThenInclude(x => x.Claim)

@@ -22,7 +22,7 @@ public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmUserEmailComman
 
     public async Task<Result> Handle(ConfirmUserEmailCommand request, CancellationToken cancellationToken)
     {
-        var user = await _tenantDbContext.Users.Include(x => x.Tenants).SingleOrDefaultAsync(
+        var user = await _tenantDbContext.Users.SingleOrDefaultAsync(
             x => x.Id == request.UserId,
             cancellationToken);
         user.ConfirmEmail();

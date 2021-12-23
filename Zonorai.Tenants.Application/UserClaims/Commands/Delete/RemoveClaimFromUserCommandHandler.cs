@@ -31,7 +31,7 @@ public class RemoveClaimFromUserCommandHandler : IRequestHandler<RemoveClaimFrom
             cancellationToken);
         if (claim == null) return Result.Fail("Claim not found");
 
-        var user = await _tenantDbContext.Users.Include(x => x.Tenants)
+        var user = await _tenantDbContext.Users.Include(x => x.Tenants).Include(x=> x.Claims)
             .SingleOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
         if (user.Tenants.Any(x => x.Id == _tenantInfo.Id) == false)
             return Result.Fail("You do not have permissions to invoke any methods on this user");

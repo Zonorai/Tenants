@@ -30,7 +30,7 @@ public class CreateClaimCommandHandler : IRequestHandler<CreateClaimCommand, Res
             {
                 return Result.Fail("A session is required to modify a claim");
             }
-            var claim = new SecurityClaim(request.Type, request.Value,_tenantInfo.Id);
+            var claim = new SecurityClaim(request.Type, request.Value);
             _tenantDbContext.Claims.Add(claim);
             await _eventStore.AddEvent(new ClaimCreatedEvent(claim.Id, claim.Value, claim.Type, DateTime.Now));
             await _tenantDbContext.SaveChangesAsync(cancellationToken);
