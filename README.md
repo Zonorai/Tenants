@@ -4,12 +4,16 @@
 
 This repository integrates with Finbuckle.MultiTenant using a Claim-Based Strategy and provides common use-cases that go along with multi-tenancy.
 
-`dotnet add package Zonorai.Tenants --version 1.0.6`
+`dotnet add package Zonorai.Tenants --version 1.0.7`
+
+'Don't use any package lower than 1.0.7'
 
 ## Implementation Details
 Functions are exposed as **Mediatr Command/Query Endpoints** with **Notifications** for each command, making it easy to **extend** this library.
 
 Persistence is driven by **EF CORE**.
+
+There are three providers available by default: Postgre, SqlLite, SqlServer each with migrations ready. 
 
 **Clean-Architecture** was used to build out this project and each respective layer has a separate nuget package.
 
@@ -49,7 +53,8 @@ The **Application Interface Layer** is for sharing requests and validators with 
         "ValidIssuer": "www.sometissuer.com",
         "ValidAudience": "www.something.com",
         "DbConnection": "SomeSqlConnection",
-        "JwtExpirationInHours": 48
+        "JwtExpirationInHours": 48,
+	"Provider":0 //0 = SqlLite,1 = SqlServer, 2= Postgre
     },
 
 
@@ -239,8 +244,11 @@ The **Application Interface Layer** is for sharing requests and validators with 
  - GetUserByEmailQuery
  - GetUserByIdQuery
  - ListUsersQuery
- - ListUserClaimsCommand
+ - ListUserClaimsQuery
  - ListClaimsQuery
+
+## Extras
+Some controllers are also availble in the net6webapi project
 
 ## License
 
